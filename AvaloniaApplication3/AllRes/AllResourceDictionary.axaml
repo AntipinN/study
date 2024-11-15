@@ -1,0 +1,27 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+					x:ClassModifier="public"
+					xmlns:vm="using:AvaloniaApplication3.ViewModels"
+					x:DataType="vm:MainWindowViewModel">
+  <!-- Add Resources Here -->
+	<ResourceDictionary.ThemeDictionaries>
+		<ResourceDictionary x:Key="Default">
+			
+		</ResourceDictionary>
+		<ResourceDictionary x:Key="Light">
+			<!--Фиолетовый-->
+			<SolidColorBrush x:Key="PressedBackgroundBrush" Color="#ff8961cc" />
+			<SolidColorBrush x:Key="PointOverButtonBackground" Color="#b59cdf" />
+			<!--Желтый с синим фоном-->
+			<!--<SolidColorBrush x:Key="PressedBackgroundBrush" Color="#FABD43" />-->
+			<!--<SolidColorBrush x:Key="PointOverButtonBackground" Color="#ffd27b" />-->
+			<!--<SolidColorBrush x:Key="WindowBackgroundColor" Color="#99ccff" />-->
+			<SolidColorBrush x:Key="ButtonBorderBrush" Color="#ff8961cc" />
+		</ResourceDictionary>	
+		<ResourceDictionary x:Key="Dark">
+			<SolidColorBrush x:Key="PressedBackgroundBrush" Color="#ff494B6B" />
+			<SolidColorBrush x:Key="PointOverButtonBackground" Color="#1c1c1e" />
+			<SolidColorBrush x:Key="ButtonBorderBrush" Color="#584d5e" />
+		</ResourceDictionary>
+	</ResourceDictionary.ThemeDictionaries>
+</ResourceDictionary>

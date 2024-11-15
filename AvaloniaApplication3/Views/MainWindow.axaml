@@ -1,0 +1,79 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:AvaloniaApplication3.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+		MinWidth="200" MinHeight="350"
+        x:Class="AvaloniaApplication3.Views.MainWindow"
+        x:DataType="vm:MainWindowViewModel"
+        Icon="/Assets/avalonia-logo.ico"
+        Title="AvaloniaApplication3">
+
+	<Design.DataContext>
+		<!-- This only sets the DataContext for the previewer in an IDE,
+             to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
+		<vm:MainWindowViewModel/>
+	</Design.DataContext>
+
+	<Window.DataContext>
+		<vm:MainWindowViewModel/>
+	</Window.DataContext>
+	<Window.Styles>
+		<StyleInclude Source="/Styles1.axaml"/>
+	</Window.Styles>
+
+	<DockPanel>
+				<StackPanel x:Name="MainMenu" VerticalAlignment="Center" IsVisible="False" DockPanel.Dock="Top" >
+					<TextBlock Text="Великий тренер дробей!" HorizontalAlignment="Center" Margin="30" FontSize="{Binding InterfaceTitleSize}"/>
+					<Button  Classes="b2" Content="Играть" HorizontalAlignment="Center" Margin="0,0,0,10" FontSize="{Binding InterfaceTextSize}" Click="Button_Click_MainMenu"/>
+					<Button  Classes="b2" Content="Инструкция" HorizontalAlignment="Center" Margin="0,0,0,10" FontSize="{Binding InterfaceTextSize}" Click="Button_Click_MainMenu"/>
+					<Button  Classes="b2" Content="Настройки" HorizontalAlignment="Center" Margin="0,0,0,10" FontSize="{Binding InterfaceTextSize}" Click="Button_Click_MainMenu"/>
+					<Button  Classes="b2" Content="Выйти" HorizontalAlignment="Center" Margin="0,0,0,10" FontSize="{Binding InterfaceTextSize}" Click="Button_Click_MainMenu"/>
+				</StackPanel>
+
+
+				<DockPanel x:Name="SettingsMenu" IsVisible="False" DockPanel.Dock="Top">
+					<StackPanel  VerticalAlignment="Center" DockPanel.Dock="Top" >
+						<TextBlock Text="Настройки" HorizontalAlignment="Center" Margin="30" FontSize="{Binding InterfaceTitleSize}"/>
+						<WrapPanel HorizontalAlignment="Center">
+							<TextBlock Text="Размер шрифта: " FontSize="{Binding InterfaceTextSize}" VerticalAlignment="Center"/>
+							<Slider x:Name="TextSize" Minimum="8" Maximum="48" Width="100" Value="{Binding InterfaceTextSize}" VerticalAlignment="Center"/>
+							<TextBlock Text="{Binding InterfaceTextSize}" FontSize="{Binding InterfaceTextSize}" VerticalAlignment="Center"/>
+						</WrapPanel>
+						<WrapPanel HorizontalAlignment="Center">
+							<TextBlock  VerticalAlignment="Center" Text="Звук: " FontSize="{Binding InterfaceTextSize}">
+							</TextBlock>
+
+							<Slider x:Name="SoundSize" Minimum="0" Maximum="10" Width="100" Value="{Binding SoundSize}" VerticalAlignment="Center"/>
+							<TextBlock Text="{Binding SoundSize}" FontSize="{Binding InterfaceTextSize}" VerticalAlignment="Center"/>
+						</WrapPanel>
+						<WrapPanel HorizontalAlignment="Center">
+							<TextBlock Text="Музыка: " FontSize="{Binding InterfaceTextSize}" VerticalAlignment="Center"/>
+							<Slider x:Name="MusicSize" Minimum="0" Maximum="10" Width="100" Value="{Binding MusicSize}" VerticalAlignment="Center"/>
+							<TextBlock Text="{Binding MusicSize}" FontSize="{Binding InterfaceTextSize}" VerticalAlignment="Center"/>
+						</WrapPanel>
+						<WrapPanel HorizontalAlignment="Center" Margin="0,10,0,0">
+							<Button Classes="b3" Content="Применить" HorizontalAlignment="Center" Margin="0,0,10,0" FontSize="{Binding InterfaceTextSize}" Click="Button_Click_Settings"/>
+							<Button Classes="b3" Content="По умолчанию" HorizontalAlignment="Center" Margin="10,0,0,0" FontSize="{Binding InterfaceTextSize}" Click="Button_Click_Settings"/>
+						</WrapPanel>
+					</StackPanel>
+					<Button Classes="b3" Content="Назад" HorizontalAlignment="Left" Margin="30,0,0,30" DockPanel.Dock="Bottom" VerticalAlignment="Bottom" FontSize="{Binding InterfaceTextSize}" Click="Button_Click_Settings"/>
+				</DockPanel>
+		
+				<Grid IsVisible="True" DockPanel.Dock="Top">
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="*"/>
+						<ColumnDefinition Width="*"/>
+						<ColumnDefinition Width="*"/>
+					</Grid.ColumnDefinitions>
+					<Grid.RowDefinitions>
+						<RowDefinition Height="*"/>
+						<RowDefinition Height="*"/>
+					</Grid.RowDefinitions>
+					<Button Content="Hello" Grid.Column="1" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Command="{Binding CreateGameCommand}" />
+					<ListBox ItemsSource="{Binding Equasion}"/>
+					
+				</Grid>
+		</DockPanel>
+</Window>
