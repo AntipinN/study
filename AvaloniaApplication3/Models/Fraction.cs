@@ -91,6 +91,11 @@ namespace AvaloniaApplication3.Models
         public static Fraction operator ! (Fraction a)
         {
             long gcd = GCD(Math.Abs(a.Numerator), Math.Abs(a.Denominator));
+            if (a.Denominator < 0)
+            {
+                a.Numerator = a.Numerator * (-1);
+                a.Denominator = Math.Abs(a.Denominator);
+            }
             return new Fraction(a.Numerator / gcd, a.Denominator / gcd);
         }
 
