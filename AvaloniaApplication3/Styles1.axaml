@@ -28,7 +28,7 @@
 		<Setter Property="BorderBrush" Value="#ff8961cc"/>
 		<Setter Property="BorderThickness" Value="3"/>
 		<Style Selector="^:pointerover /template/ ContentPresenter#PART_ContentPresenter">
-			<Setter Property="Background" Value="" />
+			<Setter Property="Background" Value="White" />
 			<Setter Property="BorderBrush" Value="Blue" />
 			<Setter Property="Foreground" Value="Black" />
 		</Style>
@@ -43,4 +43,5 @@
 			<Setter Property="Background" Value="{DynamicResource PressedBackgroundBrush}" />
 		</Style>
 	</Style>
+	
 </Styles>

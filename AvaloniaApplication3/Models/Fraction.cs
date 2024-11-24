@@ -113,7 +113,7 @@ namespace AvaloniaApplication3.Models
 
         public override string ToString()
         {
-            return $"{Numerator.ToString()} / {Denominator.ToString()}";
+            return $"{Numerator.ToString()}\n" + '/' + $"\n{Denominator.ToString()}";
         }
     }
 }

@@ -35,7 +35,7 @@ namespace AvaloniaApplication3.Models
             
         }
         
-        public class EasyDifficultyEquasion: IEquasionGenerator
+        public class EasyDifficultyEquasionSum: IEquasionGenerator
         {
             public List<object> GenerateEquasion()
             {
@@ -43,12 +43,52 @@ namespace AvaloniaApplication3.Models
                 Random rnd = new Random();
 
                 List<object> equasion = new List<object>();
-                for (int i = 0; i < 4; i++)
+                for (int i = 0; i < 3; i++)
                 {
-                    int numerator = rnd.Next(0, MaxEasyNumerator);
-                    int denominator = rnd.Next(1, 1 + numerator * MultiplayerCoefficientForDenominatorRange);
+                    int numerator = rnd.Next(1, MaxEasyNumerator);
+                    int denominator = rnd.Next(1 + numerator, 1 + numerator * MultiplayerCoefficientForDenominatorRange);
                     equasion.Add(new Fraction(numerator, denominator));
                     equasion.Add("+");
+                }
+                equasion.RemoveAt(equasion.Count - 1);
+                return equasion;
+            }
+        }
+
+        public class EasyDifficultyEquasionSubtraction : IEquasionGenerator
+        {
+            public List<object> GenerateEquasion()
+            {
+
+                Random rnd = new Random();
+
+                List<object> equasion = new List<object>();
+                for (int i = 0; i < 3; i++)
+                {
+                    int numerator = rnd.Next(1, MaxEasyNumerator);
+                    int denominator = rnd.Next(1 + numerator, 1 + numerator * MultiplayerCoefficientForDenominatorRange);
+                    equasion.Add(new Fraction(numerator, denominator));
+                    equasion.Add("-");
+                }
+                equasion.RemoveAt(equasion.Count - 1);
+                return equasion;
+            }
+        }
+
+        public class EasyDifficultyEquasionMultiply : IEquasionGenerator
+        {
+            public List<object> GenerateEquasion()
+            {
+
+                Random rnd = new Random();
+
+                List<object> equasion = new List<object>();
+                for (int i = 0; i < 3; i++)
+                {
+                    int numerator = rnd.Next(1, MaxEasyNumerator);
+                    int denominator = rnd.Next(1 + numerator, 1 + numerator * MultiplayerCoefficientForDenominatorRange);
+                    equasion.Add(new Fraction(numerator, denominator));
+                    equasion.Add("*");
                 }
                 equasion.RemoveAt(equasion.Count - 1);
                 return equasion;
