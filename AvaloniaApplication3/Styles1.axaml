@@ -1,0 +1,47 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:vm="using:AvaloniaApplication3.ViewModels"
+		xmlns:fluent="using:AvaloniaApplication3"
+		x:DataType="vm:MainWindowViewModel">
+
+	
+	<Design.PreviewWith>
+		<Border Padding="20">
+			<!-- Add Controls for Previewer Here -->
+			<StackPanel>
+				<Button Classes ="b2" Content="RataMahata"/>
+				<TextBlock Text="Alalalalala"/>
+			</StackPanel>
+
+		</Border>
+	</Design.PreviewWith>
+
+	<!-- Add Styles Here -->
+	<Styles.Resources>
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceInclude Source="/AllRes/AllResourceDictionary.axaml"/>
+			</ResourceDictionary.MergedDictionaries>
+		</ResourceDictionary>
+	</Styles.Resources>
+	<Style Selector="Button.b4">
+		<Setter Property="BorderBrush" Value="#ff8961cc"/>
+		<Setter Property="BorderThickness" Value="3"/>
+		<Style Selector="^:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+			<Setter Property="Background" Value="White" />
+			<Setter Property="BorderBrush" Value="Blue" />
+			<Setter Property="Foreground" Value="Black" />
+		</Style>
+	</Style>
+	<Style Selector="Button.b3">
+		<Setter Property="BorderBrush" Value="{DynamicResource ButtonBorderBrush}"/>
+		<Setter Property="BorderThickness" Value="0"/>
+		<Style Selector="^:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+			<Setter Property="Background" Value="{DynamicResource PointOverButtonBackground}" />
+		</Style>
+		<Style Selector="^:pressed /template/ ContentPresenter#PART_ContentPresenter">
+			<Setter Property="Background" Value="{DynamicResource PressedBackgroundBrush}" />
+		</Style>
+	</Style>
+	
+</Styles>
