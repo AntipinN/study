@@ -1,6 +1,7 @@
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Data;
+using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.VisualTree;
 using AvaloniaApplication3;
@@ -9,6 +10,7 @@ using System;
 using System.ComponentModel;
 using System.Linq;
 using Tmds.DBus.Protocol;
+using Avalonia.Input;
 
 namespace AvaloniaApplication3.Views
 {
@@ -26,7 +28,9 @@ namespace AvaloniaApplication3.Views
                 case "Играть":
                     {
                         MainMenu.IsVisible = false;
+                        MainMenu.IsEnabled = false;
                         EquasionChoiceMenu.IsVisible = true;
+                        EquasionChoiceMenu.IsEnabled= true;
                         break;
                     }
                 case "Инструкция":
@@ -36,7 +40,9 @@ namespace AvaloniaApplication3.Views
                 case "Настройки":
                     {
                         MainMenu.IsVisible = false;
+                        MainMenu.IsEnabled = false;
                         SettingsMenu.IsVisible = true;
+                        SettingsMenu.IsEnabled = true;
                         break;
                     }
                 case "Выйти":
@@ -45,6 +51,7 @@ namespace AvaloniaApplication3.Views
                         break;
                     }
             }
+            FocusManager?.ClearFocus();
         }
 
         private void Button_Click_Settings(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
@@ -65,10 +72,13 @@ namespace AvaloniaApplication3.Views
                 case "Назад":
                     {
                         SettingsMenu.IsVisible = false;
+                        SettingsMenu.IsEnabled = false;
                         MainMenu.IsVisible = true;
+                        MainMenu.IsEnabled = true;
                         break;
                     }
             }
+            FocusManager?.ClearFocus();
         }
 
         private void Button_Click_EquasionChoice(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
@@ -78,28 +88,37 @@ namespace AvaloniaApplication3.Views
                 case "Сложение":
                     {
                         EquasionChoiceMenu.IsVisible = false;
+                        EquasionChoiceMenu.IsEnabled = false;
                         SummMenu.IsVisible = true;
+                        SummMenu.IsEnabled = true;
                         break;
                     }
                 case "Вычитаниe":
                     {
                         EquasionChoiceMenu.IsVisible = false;
+                        EquasionChoiceMenu.IsEnabled = false;
                         SubtractMenu.IsVisible = true;
+                        SubtractMenu.IsEnabled = true;
                         break;
                     }
                 case "Умножение":
                     {
                         EquasionChoiceMenu.IsVisible = false;
+                        EquasionChoiceMenu.IsEnabled = false;
                         MultiplyMenu.IsVisible = true;
+                        MultiplyMenu.IsEnabled = true;
                         break;
                     }
                 default:
                     {
                         EquasionChoiceMenu.IsVisible = false;
+                        EquasionChoiceMenu.IsEnabled = false;
                         MainMenu.IsVisible = true;
+                        MainMenu.IsEnabled = true;
                         break;
                     }
             }
+            FocusManager?.ClearFocus();
         }
 
         private void Button_Click_DifficultyMenu(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
@@ -108,16 +127,22 @@ namespace AvaloniaApplication3.Views
             if ((sender as Button).Content.ToString() == "Назад")
             {
                 EquasionChoiceMenu.IsVisible = true;
+                EquasionChoiceMenu.IsEnabled = true;
             }
             else
             {
                 Playground.IsVisible = true;
+                Playground.IsEnabled = true;
             }
+            FocusManager?.ClearFocus();
         }
         private void Button_Click_EndGame(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
         {
             Playground.IsVisible = false;
+            Playground.IsEnabled = false;
             EndGameStatistics.IsVisible = true;
+            EndGameStatistics.IsEnabled = true;
+            FocusManager?.ClearFocus();
         }
 
         private void Button_SizeChanged(object? sender, Avalonia.Controls.SizeChangedEventArgs e)
@@ -146,7 +171,10 @@ namespace AvaloniaApplication3.Views
         private void Button_Click_GoToMainMenu(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
         {
             EndGameStatistics.IsVisible = false;
+            EndGameStatistics.IsEnabled = false;
             MainMenu.IsVisible = true;
+            MainMenu.IsEnabled = true;
+            FocusManager?.ClearFocus();
         }
     }
 }

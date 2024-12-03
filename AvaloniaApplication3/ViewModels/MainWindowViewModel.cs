@@ -18,6 +18,8 @@ using Avalonia.Threading;
 using System.Timers;
 using Avalonia.Controls.Platform;
 using System.Text;
+using System.Text.RegularExpressions;
+using Avalonia.Input;
 
 namespace AvaloniaApplication3.ViewModels
 {
@@ -26,23 +28,30 @@ namespace AvaloniaApplication3.ViewModels
         public MainWindowViewModel()
         {
             GenerateTimer();
+            
             CreateGameCommand = new RelayCommand(ContuneGame);
+
             CreateEasySumGameCommand = new RelayCommand(CreateEasySumGame);
             CreateEasySubtractGameCommand = new RelayCommand(CreateEasySubtractGame);
             CreateEasyMultiplyGameCommand = new RelayCommand(CreateEasyMultiplyGame);
+            
             CreateMediumSumGameCommand = new RelayCommand(CreateMediumSumGame);
             CreateMediumSubtractGameCommand = new RelayCommand(CreateMediumSubtractGame);
             CreateMediumMultiplyGameCommand = new RelayCommand(CreateMediumMultiplyGame);
+            
             CreateHardSumGameCommand = new RelayCommand(CreateHardSumGame);
             CreateHardSubtractGameCommand = new RelayCommand(CreateHardSubtractGame);
             CreateHardMultiplyGameCommand = new RelayCommand(CreateHardMultiplyGame);
 
             VerifyAnswerCommand = new RelayCommand(VerifyAnswer);
+            
             EndGameCommand = new RelayCommand(EndGame);
         }
 
 
 #pragma warning disable CA1822 // Mark members as static
+
+
         #region Settings
         [ObservableProperty]
         private int interfaceTextSize = 26;
@@ -470,8 +479,9 @@ namespace AvaloniaApplication3.ViewModels
             }
             else
             {
-                TextBox tb = new TextBox() { Text = "", TextAlignment = TextAlignment.Justify, HorizontalContentAlignment = Avalonia.Layout.HorizontalAlignment.Center };
+                TextBox tb = new TextBox() {Text = "", TextAlignment = TextAlignment.Justify, HorizontalContentAlignment = Avalonia.Layout.HorizontalAlignment.Center};
                 tb.TextChanging += TextChanged; //Костыль для корректного отображения горизонтального выравнивания
+                tb.KeyDown += TextFilter; //Фильтрация всех символов кроме цифр и обработка клавиши Enter
                 st.Children.Add(tb);
             }
             st.Children.Add(new TextBlock() { Text = middle, Height = 10, TextAlignment = TextAlignment.Center, VerticalAlignment = Avalonia.Layout.VerticalAlignment.Center });
@@ -483,10 +493,24 @@ namespace AvaloniaApplication3.ViewModels
         //Функция принудительного обновления отрисовки кнопок на ListBox.
         void TextChanged(object sender, EventArgs e)
         {
-            foreach(Control c in ((sender as TextBox).Parent as StackPanel).GetVisualChildren())
+            foreach (Control c in ((sender as TextBox).Parent as StackPanel).GetVisualChildren())
             {
                 c.InvalidateMeasure();
             }
+        }
+        void TextFilter(object sender, KeyEventArgs e)
+        {
+            Regex reg = new Regex(@"\D");
+            string s = e.KeySymbol;
+            if(e.PhysicalKey == PhysicalKey.Enter)
+            {
+                VerifyAnswerCommand.Execute(sender);
+            } 
+            if (s is not null && reg.IsMatch(s))
+            {
+                e.Handled = true;
+            }
+
         }
         public void VerifyAnswer()
         {
