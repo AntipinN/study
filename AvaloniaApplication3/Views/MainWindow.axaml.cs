@@ -126,7 +126,7 @@ namespace AvaloniaApplication3.Views
         private void Button_Click_EndGame(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
         {
             Playground.IsVisible = false;
-            MainMenu.IsVisible = true;
+            EndGameStatistics.IsVisible = true;
         }
 
         private void Button_SizeChanged(object? sender, Avalonia.Controls.SizeChangedEventArgs e)
@@ -134,5 +134,28 @@ namespace AvaloniaApplication3.Views
             AcceptButton.Width = (sender as Button).DesiredSize.Width - 20;
         }
 
+        private void Grid_SizeChanged_ChangeButtonWidth(object? sender, Avalonia.Controls.SizeChangedEventArgs e)
+        {
+            int maxImageCheckSize = 150;
+            foreach(Control element in (sender as Grid).GetVisualChildren())
+            {
+                if(element is Button)
+                {
+                    (element as Button).MaxWidth = (sender as Grid).ColumnDefinitions[0].ActualWidth - 1;
+                }
+                if(element is Image)
+                {
+                    (element as Image).MaxHeight = (new double[] { (sender as Grid).ColumnDefinitions[0].ActualWidth - 1, (sender as Grid).RowDefinitions[0].ActualHeight - 1, maxImageCheckSize }).Min();
+                    (element as Image).MaxWidth = (element as Image).MaxHeight;
+                }
+                
+            }
+        }
+
+        private void Button_Click_GoToMainMenu(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+        {
+            EndGameStatistics.IsVisible = false;
+            MainMenu.IsVisible = true;
+        }
     }
 }

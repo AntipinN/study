@@ -22,6 +22,9 @@
 	<Window.Styles>
 		<StyleInclude Source="/Styles1.axaml"/>
 	</Window.Styles>
+	<ScrollViewer>
+		
+	
 	<Grid>
 		<Grid.RowDefinitions>
 			<RowDefinition/>
@@ -29,106 +32,137 @@
 		<Grid.ColumnDefinitions>
 			<ColumnDefinition/>
 		</Grid.ColumnDefinitions>
-
+		
 		<StackPanel x:Name="MainMenu" Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" IsVisible="True">
-			<TextBlock Text="Великий тренер дробей!" HorizontalAlignment="Center" Margin="30" FontSize="{Binding InterfaceTitleSize}" TextWrapping="Wrap" TextAlignment="Center"/>
-			<Button  Classes="b2" Content="Играть" HorizontalAlignment="Center" Margin="0,0,0,10" FontSize="{Binding InterfaceTextSize}" Click="Button_Click_MainMenu"/>
-			<Button  Classes="b2" Content="Инструкция" HorizontalAlignment="Center" Margin="0,0,0,10" FontSize="{Binding InterfaceTextSize}" Click="Button_Click_MainMenu"/>
-			<Button  Classes="b2" Content="Настройки" HorizontalAlignment="Center" Margin="0,0,0,10" FontSize="{Binding InterfaceTextSize}" Click="Button_Click_MainMenu"/>
-			<Button  Classes="b2" Content="Выйти" HorizontalAlignment="Center" Margin="0,0,0,10" FontSize="{Binding InterfaceTextSize}" Click="Button_Click_MainMenu"/>
+			<TextBlock Classes="ThemeTB" Text="Великий тренер дробей!" FontSize="{Binding InterfaceTitleSize}"/>
+			<Button  Classes="b1" Content="Играть" FontSize="{Binding InterfaceTextSize}" Click="Button_Click_MainMenu"/>
+			<Button  Classes="b1" Content="Инструкция" FontSize="{Binding InterfaceTextSize}" Click="Button_Click_MainMenu"/>
+			<Button  Classes="b1" Content="Настройки" FontSize="{Binding InterfaceTextSize}" Click="Button_Click_MainMenu"/>
+			<Button  Classes="b1" Content="Выйти" FontSize="{Binding InterfaceTextSize}" Click="Button_Click_MainMenu"/>
 		</StackPanel>
 
 		<StackPanel x:Name="DegreeChooseMenu" Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" IsVisible="False">
-			<TextBlock Text="Выбери свой класс" HorizontalAlignment="Center" Margin="30" FontSize="{Binding InterfaceTitleSize}" TextWrapping="Wrap" TextAlignment="Center"/>
-			<Button  Classes="b2" Content="5 класс" HorizontalAlignment="Center" Margin="0,0,0,10" FontSize="{Binding InterfaceTextSize}" Click="Button_Click_ChoseDegree"/>
-			<Button  Classes="b2" Content="6 класс" HorizontalAlignment="Center" Margin="0,0,0,10" FontSize="{Binding InterfaceTextSize}" Click="Button_Click_ChoseDegree"/>
-			<Button  Classes="b2" Content="Назад" HorizontalAlignment="Center" Margin="0,0,0,10" FontSize="{Binding InterfaceTextSize}" Click="Button_Click_DegreeMenuBack"/>
+			<TextBlock Classes="ThemeTB" Text="Выбери свой класс" FontSize="{Binding InterfaceTitleSize}"/>
+			<Button  Classes="b1" Content="5 класс"  FontSize="{Binding InterfaceTextSize}" Click="Button_Click_ChoseDegree"/>
+			<Button  Classes="b1" Content="6 класс"  FontSize="{Binding InterfaceTextSize}" Click="Button_Click_ChoseDegree"/>
+			<Button  Classes="b1" Content="Назад" FontSize="{Binding InterfaceTextSize}" Click="Button_Click_DegreeMenuBack"/>
 		</StackPanel>
 
 		<StackPanel x:Name="FifthDegree" Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" IsVisible="False">
-			<TextBlock Text="Что ты хочешь тренировать?" HorizontalAlignment="Center" Margin="30" FontSize="{Binding InterfaceTitleSize}" TextWrapping="Wrap" TextAlignment="Center"/>
-			<Button  Classes="b2" Content="Сложение" HorizontalAlignment="Center" Margin="0,0,0,10" FontSize="{Binding InterfaceTextSize}" Click="Button_Click_FifthDegree" Command="{Binding CreateEasySumGameCommand}"/>
-			<Button  Classes="b2" Content="Вычитаниe" HorizontalAlignment="Center" Margin="0,0,0,10" FontSize="{Binding InterfaceTextSize}" Click="Button_Click_FifthDegree" Command="{Binding CreateEasySubtractGameCommand}" />
-			<Button  Classes="b2" Content="Назад" HorizontalAlignment="Center" Margin="0,0,0,10" FontSize="{Binding InterfaceTextSize}" Click="Button_Click_ChosenDegreeBack"/>
+			<TextBlock Classes="ThemeTB" Text="Что ты хочешь тренировать?" FontSize="{Binding InterfaceTitleSize}"/>
+			<Button  Classes="b1" Content="Сложение" FontSize="{Binding InterfaceTextSize}" Click="Button_Click_FifthDegree" Command="{Binding CreateEasySumGameCommand}"/>
+			<Button  Classes="b1" Content="Вычитаниe" FontSize="{Binding InterfaceTextSize}" Click="Button_Click_FifthDegree" Command="{Binding CreateEasySubtractGameCommand}" />
+			<Button  Classes="b1" Content="Назад" FontSize="{Binding InterfaceTextSize}" Click="Button_Click_ChosenDegreeBack"/>
 		</StackPanel>
 
 		<StackPanel x:Name="SixthDegree" Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" IsVisible="False">
-			<TextBlock Text="Что ты хочешь тренировать?" HorizontalAlignment="Center" Margin="30" FontSize="{Binding InterfaceTitleSize}" TextWrapping="Wrap" TextAlignment="Center"/>
-			<Button  Classes="b2" Content="Сложение" HorizontalAlignment="Center" Margin="0,0,0,10" FontSize="{Binding InterfaceTextSize}" Click="Button_Click_SixthDegree" Command="{Binding CreateEasySumGameCommand}"/>
-			<Button  Classes="b2" Content="Вычитаниe" HorizontalAlignment="Center" Margin="0,0,0,10" FontSize="{Binding InterfaceTextSize}" Click="Button_Click_SixthDegree" Command="{Binding CreateEasySubtractGameCommand}" />
-			<Button  Classes="b2" Content="Умножение" HorizontalAlignment="Center" Margin="0,0,0,10" FontSize="{Binding InterfaceTextSize}" Click="Button_Click_SixthDegree" Command="{Binding CreateEasyMultiplyGameCommand}" />
-			<Button  Classes="b2" Content="Всё сразу" HorizontalAlignment="Center" Margin="0,0,0,10" FontSize="{Binding InterfaceTextSize}" Click="Button_Click_SixthDegree" Command="{}" />
-			<Button  Classes="b2" Content="Назад" HorizontalAlignment="Center" Margin="0,0,0,10" FontSize="{Binding InterfaceTextSize}" Click="Button_Click_ChosenDegreeBack"/>
+			<TextBlock Classes="ThemeTB" Text="Что ты хочешь тренировать?" FontSize="{Binding InterfaceTitleSize}"/>
+			<Button  Classes="b1" Content="Сложение" FontSize="{Binding InterfaceTextSize}" Click="Button_Click_SixthDegree" Command="{Binding CreateEasySumGameCommand}"/>
+			<Button  Classes="b1" Content="Вычитаниe" FontSize="{Binding InterfaceTextSize}" Click="Button_Click_SixthDegree" Command="{Binding CreateEasySubtractGameCommand}" />
+			<Button  Classes="b1" Content="Умножение" FontSize="{Binding InterfaceTextSize}" Click="Button_Click_SixthDegree" Command="{Binding CreateEasyMultiplyGameCommand}" />
+			<Button  Classes="b1" Content="Всё сразу"  FontSize="{Binding InterfaceTextSize}" Click="Button_Click_SixthDegree" Command="{}" />
+			<Button  Classes="b1" Content="Назад"  FontSize="{Binding InterfaceTextSize}" Click="Button_Click_ChosenDegreeBack"/>
 		</StackPanel>
+		
+		<DockPanel x:Name="SettingsMenu" IsVisible="False" VerticalAlignment="Center" HorizontalAlignment="Center">
+					<StackPanel  VerticalAlignment="Center" DockPanel.Dock="Top" >
+						<TextBlock Classes="ThemeTB" Text="Настройки" HorizontalAlignment="Center" Margin="30" FontSize="{Binding InterfaceTitleSize}"/>
+						<WrapPanel HorizontalAlignment="Center">
+							<TextBlock Text="Размер шрифта: " TextWrapping="Wrap" FontSize="{Binding InterfaceTextSize}" VerticalAlignment="Center"/>
+							<Slider x:Name="TextSize" Minimum="15" Maximum="60" Width="100" Value="{Binding InterfaceTextSize}" VerticalAlignment="Center"/>
+							<TextBlock Text="{Binding InterfaceTextSize}" FontSize="{Binding InterfaceTextSize}" VerticalAlignment="Center"/>
+						</WrapPanel>
+						<WrapPanel HorizontalAlignment="Center">
+							<TextBlock  VerticalAlignment="Center" Text="Звук: " TextWrapping="Wrap" FontSize="{Binding InterfaceTextSize}"/>
+							<Slider x:Name="SoundSize" Minimum="0" Maximum="10" Width="100" Value="{Binding SoundSize}" VerticalAlignment="Center"/>
+							<TextBlock Text="{Binding SoundSize}" FontSize="{Binding InterfaceTextSize}" VerticalAlignment="Center"/>
+						</WrapPanel>
+						<WrapPanel HorizontalAlignment="Center">
+							<TextBlock Text="Музыка: " TextWrapping="Wrap" FontSize="{Binding InterfaceTextSize}" VerticalAlignment="Center"/>
+							<Slider x:Name="MusicSize" Minimum="0" Maximum="10" Width="100" Value="{Binding MusicSize}" VerticalAlignment="Center"/>
+							<TextBlock Text="{Binding MusicSize}" FontSize="{Binding InterfaceTextSize}" VerticalAlignment="Center"/>
+						</WrapPanel>
+						<WrapPanel  HorizontalAlignment="Center" Margin="0,0,0,0" Orientation="Horizontal">
+							<Button x:Name="AcceptButton" HorizontalAlignment="Center" Margin="10,10,10,10" FontSize="{Binding InterfaceTextSize}" Click="Button_Click_Settings">
+								<Button.Content>
+									<TextBlock Text="Применить" TextWrapping="Wrap" TextAlignment="Center"/>
+								</Button.Content>
+							</Button>
+							<Button x:Name="ByDefaultButton" SizeChanged="Button_SizeChanged" Content="По умолчанию" HorizontalAlignment="Center" Margin="10,10,10,10" FontSize="{Binding InterfaceTextSize}" Click="Button_Click_Settings"/>
+							
+						</WrapPanel>
+					</StackPanel>
+					<Button  Content="Назад" HorizontalAlignment="Center" Margin="0,20,0,0" DockPanel.Dock="Bottom" VerticalAlignment="Bottom" FontSize="{Binding InterfaceTextSize}" Click="Button_Click_Settings"/>
+				</DockPanel>
 
-
-
-		<DockPanel x:Name="SettingsMenu" Grid.Column="0" Grid.Row="0" IsVisible="False" VerticalAlignment="Center" HorizontalAlignment="Center">
-			<StackPanel  VerticalAlignment="Center" DockPanel.Dock="Top" >
-				<TextBlock Text="Настройки" HorizontalAlignment="Center" Margin="30" FontSize="{Binding InterfaceTitleSize}"/>
-				<WrapPanel HorizontalAlignment="Center">
-					<TextBlock Text="Размер шрифта: " FontSize="{Binding InterfaceTextSize}" VerticalAlignment="Center"/>
-					<Slider x:Name="TextSize" Minimum="15" Maximum="60" Width="100" Value="{Binding InterfaceTextSize}" VerticalAlignment="Center"/>
-					<TextBlock Text="{Binding InterfaceTextSize}" FontSize="{Binding InterfaceTextSize}" VerticalAlignment="Center"/>
-				</WrapPanel>
-				<WrapPanel HorizontalAlignment="Center">
-					<TextBlock  VerticalAlignment="Center" Text="Звук: " FontSize="{Binding InterfaceTextSize}">
-					</TextBlock>
-
-					<Slider x:Name="SoundSize" Minimum="0" Maximum="10" Width="100" Value="{Binding SoundSize}" VerticalAlignment="Center"/>
-					<TextBlock Text="{Binding SoundSize}" FontSize="{Binding InterfaceTextSize}" VerticalAlignment="Center"/>
-				</WrapPanel>
-				<WrapPanel HorizontalAlignment="Center">
-					<TextBlock Text="Музыка: " FontSize="{Binding InterfaceTextSize}" VerticalAlignment="Center"/>
-					<Slider x:Name="MusicSize" Minimum="0" Maximum="10" Width="100" Value="{Binding MusicSize}" VerticalAlignment="Center"/>
-					<TextBlock Text="{Binding MusicSize}" FontSize="{Binding InterfaceTextSize}" VerticalAlignment="Center"/>
-				</WrapPanel>
-				<WrapPanel  HorizontalAlignment="Stretch" Margin="0,0,0,0" Orientation="Horizontal">
-					<Button x:Name="AcceptButton" Classes="b3" HorizontalAlignment="Center" Margin="10,10,10,10" FontSize="{Binding InterfaceTextSize}" Click="Button_Click_Settings" Width="{Binding ElementName = ByDefaultButton, Path=Width}" >
-						<Button.Content>
-							<TextBlock Text="Применить" TextAlignment="Center"/>
-						</Button.Content>
-					</Button>
-					<Button x:Name="ByDefaultButton" SizeChanged="Button_SizeChanged" Classes="b3" Content="По умолчанию" HorizontalAlignment="Center" Margin="10,10,10,10" FontSize="{Binding InterfaceTextSize}" Click="Button_Click_Settings"/>
-				</WrapPanel>
-			</StackPanel>
-			<Button Classes="b3" Content="Назад" HorizontalAlignment="Center" Margin="0,20,0,0" DockPanel.Dock="Bottom" VerticalAlignment="Bottom" FontSize="{Binding InterfaceTextSize}" Click="Button_Click_Settings"/>
-		</DockPanel>
-
-		<Grid x:Name="Playground" IsVisible="False" DockPanel.Dock="Top">
-			<Grid.ColumnDefinitions>
-				<ColumnDefinition Width="*"/>
-				<ColumnDefinition Width="*"/>
-				<ColumnDefinition Width="*"/>
-				<ColumnDefinition Width="*"/>
-			</Grid.ColumnDefinitions>
+		<Grid x:Name="EndGameStatistics" IsVisible="False">
 			<Grid.RowDefinitions>
 				<RowDefinition Height="*"/>
 				<RowDefinition Height="*"/>
 				<RowDefinition Height="*"/>
-				<RowDefinition Height="*"/>
 			</Grid.RowDefinitions>
-			<Button Content="Следующий" Grid.Column="2" Grid.Row="3" Grid.ColumnSpan="2" FontSize="{Binding InterfaceTextSize}" Command="{Binding CreateGameCommand}" HorizontalAlignment="Center"  IsEnabled="{Binding GenerateEquasionIsActive}" />
-			<Button Content="Проверить" Grid.Column="1" Grid.Row="3" Grid.ColumnSpan="2" FontSize="{Binding InterfaceTextSize}" Command="{Binding VerifyAnswerCommand}" HorizontalAlignment="Center"/>
-			<Button Content="Завершить" Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="2" FontSize="{Binding InterfaceTextSize}" Command="{Binding EndGameCommand}" HorizontalAlignment="Center" Click="Button_Click_EndGame" />
-			<TextBlock Text="{Binding TimerString}"/>
-			<ListBox Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="2" Grid.RowSpan="2" ItemsSource="{Binding AnswerEquasion}" Margin="0,0,0,0" IsHitTestVisible="True" VerticalAlignment="Center" HorizontalAlignment="Center" CornerRadius="5" FontSize="{Binding InterfaceTextSize}">
-				<ItemsControl.ItemsPanel>
-					<ItemsPanelTemplate>
-						<WrapPanel Orientation="Horizontal"/>
-					</ItemsPanelTemplate>
-				</ItemsControl.ItemsPanel>
-				<ListBox.Styles> <!--Такой стиль необходим для лучшего представления ListBox как ряда дробей-->
-					<Style Selector="ListBoxItem:selected /template/ ContentPresenter">
-					<Setter Property="Background" Value="Transparent"/>
-					</Style>
-					<Style Selector="ListBoxItem:pointerover /template/ ContentPresenter">
-					<Setter Property="Background" Value="Transparent"/>
-					</Style>
-				</ListBox.Styles>
-			</ListBox>
-			<TextBlock  Text="{Binding IsEquasionCorrectTextBlock}" FontSize="{Binding InterfaceTextSize}" IsVisible="{Binding IsEqusaisonIncorrect}" TextWrapping="Wrap" Grid.Column="3" Grid.Row="1" Grid.RowSpan="2" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+			<Grid.ColumnDefinitions>
+			</Grid.ColumnDefinitions>
+			<TextBlock Grid.Row="0" Text="Результаты" FontSize="{Binding InterfaceTitleSize}" HorizontalAlignment="Center" VerticalAlignment="Center" TextAlignment="Center"/>
+			<TextBlock Grid.Row="1" Text="{Binding ResultsOfTheGame}" FontSize="{Binding InterfaceTextSize}" HorizontalAlignment="Center" VerticalAlignment="Center" TextAlignment="Center"/>
+			<Button Grid.Row="2" HorizontalAlignment="Center" Click="Button_Click_GoToMainMenu">
+				<TextBlock Text="В главное меню" FontSize="{Binding InterfaceTextSize}"/>
+			</Button>
 		</Grid>
+
+		<Grid x:Name="Playground" IsVisible="False" DockPanel.Dock="Top" Grid.Column="0" Grid.Row="0" SizeChanged="Grid_SizeChanged_ChangeButtonWidth" ShowGridLines="False" >
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="*" />
+					<ColumnDefinition Width="*"/>
+					<ColumnDefinition Width="*"/>
+					<ColumnDefinition Width="*"/>
+				</Grid.ColumnDefinitions>
+				<Grid.RowDefinitions>
+					<RowDefinition Height="*"/>
+					<RowDefinition Height="*"/>
+					<RowDefinition Height="*"/>
+					<RowDefinition Height="*"/>
+				</Grid.RowDefinitions>
+				<Button Margin="10" Grid.Column="2" Grid.ColumnSpan="2" Grid.Row="3" Command="{Binding CreateGameCommand}" HorizontalAlignment="Center"  IsEnabled="{Binding GenerateEquasionIsActive}">
+					<Button.Content>
+						<TextBlock Text="Следующий" TextWrapping="Wrap" FontSize="{Binding InterfaceTextSize}"/>
+					</Button.Content>
+				</Button>
+				<Button Margin="10" Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="3" Command="{Binding VerifyAnswerCommand}" HorizontalAlignment="Center">
+					<Button.Content>
+						<TextBlock Text="Проверить" TextWrapping="Wrap" FontSize="{Binding InterfaceTextSize}"/>
+					</Button.Content>
+				</Button>
+				<Button Margin="10" Grid.Column="0" Grid.ColumnSpan="2"  Grid.Row="3"  Command="{Binding EndGameCommand}" HorizontalAlignment="Center" Click="Button_Click_EndGame">
+					<Button.Content>
+						<TextBlock Text="Завершить" TextWrapping="Wrap" FontSize="{Binding InterfaceTextSize}"/>
+					</Button.Content>
+				</Button>
+
+				
+				<TextBlock Text="{Binding TimerString}" HorizontalAlignment="Center" Margin="10,10,0,0" FontSize="{Binding InterfaceTextSize}"/>
+
+				<ListBox Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="2" Grid.RowSpan="2" ItemsSource="{Binding AnswerEquasion}" Margin="0,0,0,0" IsHitTestVisible="True" VerticalAlignment="Center" HorizontalAlignment="Center" CornerRadius="5" FontSize="{Binding InterfaceTextSize}">
+					<ItemsControl.ItemsPanel>
+						<ItemsPanelTemplate>
+							<WrapPanel Orientation="Horizontal"/>
+						</ItemsPanelTemplate>
+					</ItemsControl.ItemsPanel>
+					<ListBox.Styles>
+						<!--Такой стиль необходим для лучшего представления ListBox как ряда дробей-->
+						<Style Selector="ListBoxItem:selected /template/ ContentPresenter">
+							<Setter Property="Background" Value="Transparent"/>
+						</Style>
+						<Style Selector="ListBoxItem:pointerover /template/ ContentPresenter">
+							<Setter Property="Background" Value="Transparent"/>
+						</Style>
+					</ListBox.Styles>
+				</ListBox>
+			
+				<Image HorizontalAlignment="Left" Grid.Column="3" Grid.Row="1" Grid.RowSpan="2" Source="avares://AvaloniaApplication3/Assets/Accepted.png" IsVisible="{Binding GenerateEquasionIsActive}"/>
+				<Image HorizontalAlignment="Left" Grid.Column="3" Grid.Row="1" Grid.RowSpan="2"  Source="avares://AvaloniaApplication3/Assets/Declined.png" IsVisible="{Binding IsEqusaisonIncorrect}"/>
+			</Grid>
 		
 	</Grid>
+	</ScrollViewer>
 </Window>
