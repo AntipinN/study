@@ -30,7 +30,13 @@ namespace AvaloniaApplication3.ViewModels
             CreateEasySumGameCommand = new RelayCommand(CreateEasySumGame);
             CreateEasySubtractGameCommand = new RelayCommand(CreateEasySubtractGame);
             CreateEasyMultiplyGameCommand = new RelayCommand(CreateEasyMultiplyGame);
-       
+            CreateMediumSumGameCommand = new RelayCommand(CreateMediumSumGame);
+            CreateMediumSubtractGameCommand = new RelayCommand(CreateMediumSubtractGame);
+            CreateMediumMultiplyGameCommand = new RelayCommand(CreateMediumMultiplyGame);
+            CreateHardSumGameCommand = new RelayCommand(CreateHardSumGame);
+            CreateHardSubtractGameCommand = new RelayCommand(CreateHardSubtractGame);
+            CreateHardMultiplyGameCommand = new RelayCommand(CreateHardMultiplyGame);
+
             VerifyAnswerCommand = new RelayCommand(VerifyAnswer);
             EndGameCommand = new RelayCommand(EndGame);
         }
@@ -51,6 +57,19 @@ namespace AvaloniaApplication3.ViewModels
         private int soundSize = 5;
         [ObservableProperty]
         private int musicSize = 5;
+
+        #region Menu Locale
+        [ObservableProperty]
+        string easy = "Лёгкий";
+        [ObservableProperty]
+        string medium = "Средний";
+        [ObservableProperty]
+        string hard = "Высокий";
+        [ObservableProperty]
+        static string back = "Назад";
+        
+        #endregion
+
         #endregion
 
 
@@ -77,6 +96,14 @@ namespace AvaloniaApplication3.ViewModels
         GameGenerator EasySubtractGame = new GameGenerator(new EasyDifficultyEquasionSubtraction(), new FractionEquasionSolver(), new UniversalOPZFormer());
         GameGenerator EasyMultiplyGame = new GameGenerator(new EasyDifficultyEquasionMultiply(), new FractionEquasionSolver(), new UniversalOPZFormer());
 
+        GameGenerator MediumSumGame = new GameGenerator(new MediumDifficultyEquasionSum(), new FractionEquasionSolver(), new UniversalOPZFormer());
+        GameGenerator MediumSubtractGame = new GameGenerator(new MediumDifficultyEquasionSubtraction(), new FractionEquasionSolver(), new UniversalOPZFormer());
+        GameGenerator MediumMultiplyGame = new GameGenerator(new MediumDifficultyEquasionMultiply(), new FractionEquasionSolver(), new UniversalOPZFormer());
+
+        GameGenerator HardSumGame = new GameGenerator(new HighDifficultyEquasionSum(), new FractionEquasionSolver(), new UniversalOPZFormer());
+        GameGenerator HardSubractGame = new GameGenerator(new HighDifficultyEquasionSubtraction(), new FractionEquasionSolver(), new UniversalOPZFormer());
+        GameGenerator HardMultiplyGame = new GameGenerator(new HighDifficultyEquasionMultiply(), new FractionEquasionSolver(), new UniversalOPZFormer());
+
         [ObservableProperty]
         string timerString = "";
 
@@ -89,7 +116,7 @@ namespace AvaloniaApplication3.ViewModels
         public ICommand CreateEasySumGameCommand { get; }
         bool EasySumGameCreated = false;
         public ICommand CreateEasySubtractGameCommand { get; }
-        bool EasySibtractGameCreated = false;
+        bool EasySubtractGameCreated = false;
         public ICommand CreateEasyMultiplyGameCommand { get; }
         bool EasyMultiplyGameCreated = false;
         public ICommand CreateMediumSumGameCommand { get; }
@@ -98,6 +125,13 @@ namespace AvaloniaApplication3.ViewModels
         bool MediumSubtractGameCreated = false;
         public ICommand CreateMediumMultiplyGameCommand { get; }
         bool MediumMultiplyGameCreated = false;
+        public ICommand CreateHardSumGameCommand { get; }
+        bool HardSumGameCreated = false;
+        public ICommand CreateHardSubtractGameCommand { get; }
+        bool HardSubtractGameCreated = false;
+        public ICommand CreateHardMultiplyGameCommand { get; }
+        bool HardMultiplyGameCreated = false;
+
         public ICommand VerifyAnswerCommand { get; }
 
         public ICommand EndGameCommand { get; }
@@ -105,13 +139,14 @@ namespace AvaloniaApplication3.ViewModels
 
         #region Methods Region
 
+        #region Game Creators
         void ContuneGame()
         {
             if (EasySumGameCreated)
             {
                 CreateGame(EasySumGame);
             }
-            else if (EasySibtractGameCreated)
+            else if (EasySubtractGameCreated)
             {
                 CreateGame(EasySubtractGame);
             }
@@ -119,19 +154,33 @@ namespace AvaloniaApplication3.ViewModels
             {
                 CreateGame(EasyMultiplyGame);
             }
+            else if (MediumSumGameCreated)
+            {
+                CreateGame(MediumSumGame);
+            }
+            else if (MediumSubtractGameCreated)
+            {
+                CreateGame(MediumSubtractGame);
+            }
+            else if (MediumMultiplyGameCreated)
+            {
+                CreateGame(MediumMultiplyGame);
+            }
+            else if (HardSumGameCreated)
+            {
+                CreateGame(HardSumGame);
+            }
+            else if (HardSubtractGameCreated)
+            {
+                CreateGame(HardSubractGame);
+            }
+            else if (HardMultiplyGameCreated)
+            {
+                CreateGame(HardMultiplyGame);
+            }
         }
-        void EndGame()
-        {
-            EasySumGameCreated = false;
-            EasySibtractGameCreated = false;
-            EasyMultiplyGameCreated = false;
-            MediumSumGameCreated = false;
-            MediumSubtractGameCreated = false;
-            MediumMultiplyGameCreated = false;
-            IsEqusaisonIncorrect = false;
-            SaveResults();
-            StopTimer();
-        }
+        
+
         void CreateEasySumGame()
         {
             EasySumGameCreated = true;
@@ -139,13 +188,62 @@ namespace AvaloniaApplication3.ViewModels
         }
         void CreateEasySubtractGame()
         {
-            EasySibtractGameCreated= true;
+            EasySubtractGameCreated = true;
             CreateGame(EasySubtractGame);
         }
         void CreateEasyMultiplyGame()
         {
             EasyMultiplyGameCreated = true;
             CreateGame(EasyMultiplyGame);
+        }
+
+        void CreateMediumSumGame()
+        {
+            MediumSumGameCreated = true;
+            CreateGame(MediumSumGame);
+        }
+        void CreateMediumSubtractGame()
+        {
+            MediumSubtractGameCreated = true;
+            CreateGame(MediumSubtractGame);
+        }
+        void CreateMediumMultiplyGame()
+        {
+            MediumMultiplyGameCreated = true;
+            CreateGame(MediumMultiplyGame);
+        }
+
+        void CreateHardSumGame()
+        {
+            HardSumGameCreated = true;
+            CreateGame(HardSumGame);
+        }
+        void CreateHardSubtractGame()
+        {
+            HardSubtractGameCreated = true;
+            CreateGame(HardSubractGame);
+        }
+        void CreateHardMultiplyGame()
+        {
+            HardMultiplyGameCreated = true;
+            CreateGame(HardMultiplyGame);
+        }
+        #endregion
+
+        void EndGame()
+        {
+            EasySumGameCreated = false;
+            EasySubtractGameCreated = false;
+            EasyMultiplyGameCreated = false;
+            MediumSumGameCreated = false;
+            MediumSubtractGameCreated = false;
+            MediumMultiplyGameCreated = false;
+            HardSumGameCreated = false;
+            HardSubtractGameCreated = false;
+            HardMultiplyGameCreated = false;
+            IsEqusaisonIncorrect = false;
+            SaveResults();
+            StopTimer();
         }
         void SaveResults()
         {
@@ -237,12 +335,12 @@ namespace AvaloniaApplication3.ViewModels
                     switch (dateTime.Minute % 10)
                     {
                         case 1:
-                            sb.Append("минуа");
+                            sb.Append("минута");
                             break;
                         case 2:
                         case 3:
                         case 4:
-                            sb.Append("минуы");
+                            sb.Append("минуты");
                             break;
                         default:
                             sb.Append("минут");

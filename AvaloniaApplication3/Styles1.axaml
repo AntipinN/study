@@ -67,4 +67,14 @@
 		<Setter Property="Background" Value="White"/>
 	</Style>
 	
+	<Style Selector="StackPanel.VerHorCenter">
+		<Setter Property="HorizontalAlignment" Value="Center"/>
+		<Setter Property="VerticalAlignment" Value="Center"/>
+	</Style>
+
+	<Style Selector="TextBlock.GameTextBlock">
+		<Setter Property="TextAlignment" Value="Center"/>
+		<Setter Property="MaxHeight" Value="{Binding InterfaceTextSize}"/>
+	</Style>
+	
 </Styles>

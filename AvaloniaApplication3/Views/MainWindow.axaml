@@ -41,27 +41,36 @@
 			<Button  Classes="b1" Content="Выйти" FontSize="{Binding InterfaceTextSize}" Click="Button_Click_MainMenu"/>
 		</StackPanel>
 
-		<StackPanel x:Name="DegreeChooseMenu" Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" IsVisible="False">
-			<TextBlock Classes="ThemeTB" Text="Выбери свой класс" FontSize="{Binding InterfaceTitleSize}"/>
-			<Button  Classes="b1" Content="5 класс"  FontSize="{Binding InterfaceTextSize}" Click="Button_Click_ChoseDegree"/>
-			<Button  Classes="b1" Content="6 класс"  FontSize="{Binding InterfaceTextSize}" Click="Button_Click_ChoseDegree"/>
-			<Button  Classes="b1" Content="Назад" FontSize="{Binding InterfaceTextSize}" Click="Button_Click_DegreeMenuBack"/>
+		<StackPanel x:Name="EquasionChoiceMenu" Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" IsVisible="False">
+			<TextBlock Classes="ThemeTB" Text="Что ты хочешь тренировать?" FontSize="{Binding InterfaceTitleSize}"/>
+			<Button  Classes="b1" Content="Сложение" Click="Button_Click_EquasionChoice" FontSize="{Binding InterfaceTextSize}"/>
+			<Button  Classes="b1" Content="Вычитаниe" Click="Button_Click_EquasionChoice" FontSize="{Binding InterfaceTextSize}"/>
+			<Button  Classes="b1" Content="Умножение" Click="Button_Click_EquasionChoice" FontSize="{Binding InterfaceTextSize}"/>
+			<Button  Classes="b1" Content="Назад" Click="Button_Click_EquasionChoice" FontSize="{Binding InterfaceTextSize}"/>
 		</StackPanel>
 
-		<StackPanel x:Name="FifthDegree" Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" IsVisible="False">
-			<TextBlock Classes="ThemeTB" Text="Что ты хочешь тренировать?" FontSize="{Binding InterfaceTitleSize}"/>
-			<Button  Classes="b1" Content="Сложение" FontSize="{Binding InterfaceTextSize}" Click="Button_Click_FifthDegree" Command="{Binding CreateEasySumGameCommand}"/>
-			<Button  Classes="b1" Content="Вычитаниe" FontSize="{Binding InterfaceTextSize}" Click="Button_Click_FifthDegree" Command="{Binding CreateEasySubtractGameCommand}" />
-			<Button  Classes="b1" Content="Назад" FontSize="{Binding InterfaceTextSize}" Click="Button_Click_ChosenDegreeBack"/>
+		<StackPanel x:Name="SummMenu" Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" IsVisible="False">
+			<TextBlock Classes="ThemeTB" Text="Выбери сложность" FontSize="{Binding InterfaceTitleSize}"/>
+			<Button  Classes="b1" Content="{Binding Easy}" FontSize="{Binding InterfaceTextSize}" Click="Button_Click_DifficultyMenu" Command="{Binding CreateEasySumGameCommand}"/>
+			<Button  Classes="b1" Content="{Binding Medium}" FontSize="{Binding InterfaceTextSize}" Click="Button_Click_DifficultyMenu" Command="{Binding CreateMediumSumGameCommand}" />
+			<Button  Classes="b1" Content="{Binding Hard}" FontSize="{Binding InterfaceTextSize}" Click="Button_Click_DifficultyMenu" Command="{Binding CreateHardSumGameCommand}" />
+			<Button  Classes="b1" Content="{Binding Back}"  FontSize="{Binding InterfaceTextSize}" Click="Button_Click_DifficultyMenu"/>
 		</StackPanel>
-
-		<StackPanel x:Name="SixthDegree" Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" IsVisible="False">
-			<TextBlock Classes="ThemeTB" Text="Что ты хочешь тренировать?" FontSize="{Binding InterfaceTitleSize}"/>
-			<Button  Classes="b1" Content="Сложение" FontSize="{Binding InterfaceTextSize}" Click="Button_Click_SixthDegree" Command="{Binding CreateEasySumGameCommand}"/>
-			<Button  Classes="b1" Content="Вычитаниe" FontSize="{Binding InterfaceTextSize}" Click="Button_Click_SixthDegree" Command="{Binding CreateEasySubtractGameCommand}" />
-			<Button  Classes="b1" Content="Умножение" FontSize="{Binding InterfaceTextSize}" Click="Button_Click_SixthDegree" Command="{Binding CreateEasyMultiplyGameCommand}" />
-			<Button  Classes="b1" Content="Всё сразу"  FontSize="{Binding InterfaceTextSize}" Click="Button_Click_SixthDegree" Command="{}" />
-			<Button  Classes="b1" Content="Назад"  FontSize="{Binding InterfaceTextSize}" Click="Button_Click_ChosenDegreeBack"/>
+		
+		<StackPanel x:Name="SubtractMenu" Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" IsVisible="False">
+			<TextBlock Classes="ThemeTB" Text="Выбери сложность" FontSize="{Binding InterfaceTitleSize}"/>
+			<Button  Classes="b1" Content="{Binding Easy}" FontSize="{Binding InterfaceTextSize}" Click="Button_Click_DifficultyMenu" Command="{Binding CreateEasySubtractGameCommand}"/>
+			<Button  Classes="b1" Content="{Binding Medium}" FontSize="{Binding InterfaceTextSize}" Click="Button_Click_DifficultyMenu" Command="{Binding CreateMediumSubtractGameCommand}" />
+			<Button  Classes="b1" Content="{Binding Hard}" FontSize="{Binding InterfaceTextSize}" Click="Button_Click_DifficultyMenu" Command="{Binding CreateHardSubtractGameCommand}" />
+			<Button  Classes="b1" Content="{Binding Back}"  FontSize="{Binding InterfaceTextSize}" Click="Button_Click_DifficultyMenu"/>
+		</StackPanel>
+		
+		<StackPanel x:Name="MultiplyMenu" Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" IsVisible="False">
+			<TextBlock Classes="ThemeTB" Text="Выбери сложность" FontSize="{Binding InterfaceTitleSize}"/>
+			<Button  Classes="b1" Content="{Binding Easy}" FontSize="{Binding InterfaceTextSize}" Click="Button_Click_DifficultyMenu" Command="{Binding CreateEasyMultiplyGameCommand}"/>
+			<Button  Classes="b1" Content="{Binding Medium}" FontSize="{Binding InterfaceTextSize}" Click="Button_Click_DifficultyMenu" Command="{Binding CreateMediumMultiplyGameCommand}" />
+			<Button  Classes="b1" Content="{Binding Hard}" FontSize="{Binding InterfaceTextSize}" Click="Button_Click_DifficultyMenu" Command="{Binding CreateHardMultiplyGameCommand}" />
+			<Button  Classes="b1" Content="{Binding Back}"  FontSize="{Binding InterfaceTextSize}" Click="Button_Click_DifficultyMenu"/>
 		</StackPanel>
 		
 		<DockPanel x:Name="SettingsMenu" IsVisible="False" VerticalAlignment="Center" HorizontalAlignment="Center">
@@ -92,7 +101,7 @@
 							
 						</WrapPanel>
 					</StackPanel>
-					<Button  Content="Назад" HorizontalAlignment="Center" Margin="0,20,0,0" DockPanel.Dock="Bottom" VerticalAlignment="Bottom" FontSize="{Binding InterfaceTextSize}" Click="Button_Click_Settings"/>
+					<Button  Content="{Binding Back}" HorizontalAlignment="Center" Margin="0,20,0,0" DockPanel.Dock="Bottom" VerticalAlignment="Bottom" FontSize="{Binding InterfaceTextSize}" Click="Button_Click_Settings"/>
 				</DockPanel>
 
 		<Grid x:Name="EndGameStatistics" IsVisible="False">

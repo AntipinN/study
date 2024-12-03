@@ -1,8 +1,10 @@
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
+using Avalonia.Data;
 using Avalonia.Interactivity;
 using Avalonia.VisualTree;
 using AvaloniaApplication3;
+using AvaloniaApplication3.ViewModels;
 using System;
 using System.ComponentModel;
 using System.Linq;
@@ -12,6 +14,7 @@ namespace AvaloniaApplication3.Views
 {
     public partial class MainWindow : Window
     {
+        
         public MainWindow()
         {
             InitializeComponent();
@@ -23,7 +26,7 @@ namespace AvaloniaApplication3.Views
                 case "Играть":
                     {
                         MainMenu.IsVisible = false;
-                        DegreeChooseMenu.IsVisible = true;
+                        EquasionChoiceMenu.IsVisible = true;
                         break;
                     }
                 case "Инструкция":
@@ -68,61 +71,49 @@ namespace AvaloniaApplication3.Views
             }
         }
 
-        private void Button_Click_FifthDegree(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+        private void Button_Click_EquasionChoice(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
         {
-            FifthDegree.IsVisible = false;
-            Playground.IsVisible = true;
-        }
-        private void Button_Click_SixthDegree(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
-        {
-            SixthDegree.IsVisible = false;
-            Playground.IsVisible = true;
-        }
-
-        private void Button_Click_ChoseDegree(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
-        {
-            switch((sender as Button).Content)
+            switch ((sender as Button).Content.ToString())
             {
-                case "5 класс":
+                case "Сложение":
                     {
-                        DegreeChooseMenu.IsVisible = false;
-                        FifthDegree.IsVisible = true;
+                        EquasionChoiceMenu.IsVisible = false;
+                        SummMenu.IsVisible = true;
                         break;
                     }
-                case "6 класс":
+                case "Вычитаниe":
                     {
-                        DegreeChooseMenu.IsVisible = false;
-                        SixthDegree.IsVisible = true;
+                        EquasionChoiceMenu.IsVisible = false;
+                        SubtractMenu.IsVisible = true;
+                        break;
+                    }
+                case "Умножение":
+                    {
+                        EquasionChoiceMenu.IsVisible = false;
+                        MultiplyMenu.IsVisible = true;
+                        break;
+                    }
+                default:
+                    {
+                        EquasionChoiceMenu.IsVisible = false;
+                        MainMenu.IsVisible = true;
                         break;
                     }
             }
         }
 
-
-        private void Button_Click_ChosenDegreeBack(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+        private void Button_Click_DifficultyMenu(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
         {
-            switch ((sender as Button).Parent.Name)
+            ((sender as Button).Parent as StackPanel).IsVisible = false;
+            if ((sender as Button).Content.ToString() == "Назад")
             {
-                case "FifthDegree":
-                    {
-                        FifthDegree.IsVisible = false;
-                        DegreeChooseMenu.IsVisible = true;
-                        break;
-                    }
-                case "SixthDegree":
-                    {
-                        SixthDegree.IsVisible = false;
-                        DegreeChooseMenu.IsVisible = true;
-                        break;
-                    }
+                EquasionChoiceMenu.IsVisible = true;
+            }
+            else
+            {
+                Playground.IsVisible = true;
             }
         }
-        private void Button_Click_DegreeMenuBack(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
-        {
-            DegreeChooseMenu.IsVisible = false;
-            MainMenu.IsVisible = true;
-        }
-
         private void Button_Click_EndGame(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
         {
             Playground.IsVisible = false;
