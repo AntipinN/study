@@ -176,5 +176,15 @@ namespace AvaloniaApplication3.Views
             MainMenu.IsEnabled = true;
             FocusManager?.ClearFocus();
         }
+
+        public void Next(object source, RoutedEventArgs args)
+        {
+            Instruction.Next();
+        }
+
+        public void Previous(object source, RoutedEventArgs args)
+        {
+            Instruction.Previous();
+        }
     }
 }

@@ -27,13 +27,45 @@ namespace AvaloniaApplication3.Models
                 _IOPZ = opz;
             }
 
-            public List<object> GetExpression()
+            public List<string> GetExpression()
             {
                 List<object> result = _IGenerator.GenerateEquasion();
                 
                 result.Add(_ISolver.Solve(_IOPZ.CalculateOPZ(result)));
                 result.Insert(result.Count - 1, "=");
-                return result;
+                List<string> package = new List<string>();
+                foreach(object o in result)
+                {
+                    package.Add(o.ToString());
+                }
+                return package;
+            }
+            public bool CheckEquasion(string Answer, string Origin)
+            {
+                if(Answer.Length == 0)
+                {
+                    return false;
+                }
+                string[] first = Answer.Split('/');
+                string[] second = Origin.Split('/');
+                if (first.Length > 1 && first[0].Length > 0)
+                {
+                    Fraction Answ = new Fraction(long.Parse(first[0]), long.Parse(first[1]));
+                    Fraction Orig = new Fraction(long.Parse(second[0]), long.Parse(second[1]));
+                    if ((Answ - Orig).Numerator == 0)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+                else
+                {
+                    return false;
+                }
+                
             }
             
         }

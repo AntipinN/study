@@ -113,6 +113,8 @@ namespace AvaloniaApplication3.ViewModels
         GameGenerator HardSubractGame = new GameGenerator(new HighDifficultyEquasionSubtraction(), new FractionEquasionSolver(), new UniversalOPZFormer());
         GameGenerator HardMultiplyGame = new GameGenerator(new HighDifficultyEquasionMultiply(), new FractionEquasionSolver(), new UniversalOPZFormer());
 
+        GameGenerator CurrentGame;
+
         [ObservableProperty]
         string timerString = "";
 
@@ -432,12 +434,12 @@ namespace AvaloniaApplication3.ViewModels
 
         void CreateGame(GameGenerator Game)
         {
-            StartTimer();
+            CurrentGame = Game;
             List<object> ButtonsTextBlock = new List<object>();
             List<object> ButtonsTextBox = new List<object>();
             int i = 0;
-            List<object> gameObjects = Game.GetExpression();
-            foreach (object o in gameObjects)
+            List<string> gameObjects = Game.GetExpression();
+            foreach (string o in gameObjects)
             {   
                 string[] list = o.ToString().Split(new char[] { '/', '\n' }, StringSplitOptions.RemoveEmptyEntries);
                 Button tmpButtonOne = new Button() { Classes = {"GameButtons"} };
@@ -458,8 +460,9 @@ namespace AvaloniaApplication3.ViewModels
             Equasion = ButtonsTextBlock;
             AnswerEquasion = ButtonsTextBox;
             GenerateEquasionIsActive = false;
+            StartTimer();
         }
-        void CreateGameSubFunkForFraction(ref string[] list, ref List<object> gameObjects,  ref Button tmpButtonOne, ref Button tmpButtonTwo, ref int i )
+        void CreateGameSubFunkForFraction(ref string[] list, ref List<string> gameObjects,  ref Button tmpButtonOne, ref Button tmpButtonTwo, ref int i )
         {
             string middle = string.Concat(Enumerable.Repeat("―", Math.Max(list[0].Length, list[1].Length)));
             StackPanel st = new StackPanel() { Classes = { "VerHorAllCenter" } };
@@ -476,6 +479,8 @@ namespace AvaloniaApplication3.ViewModels
             if (i < gameObjects.Count - 1)
             {
                 st.Children.Add(new TextBlock() { Text = list[0], Classes = { "GameTextBlock" } });
+                st.Children.Add(new TextBlock() { Text = middle, Height = 10, TextAlignment = TextAlignment.Center, VerticalAlignment = Avalonia.Layout.VerticalAlignment.Center });
+                st.Children.Add(new TextBlock() { Text = list[1], Classes = { "GameTextBlock" } });
             }
             else
             {
@@ -483,9 +488,14 @@ namespace AvaloniaApplication3.ViewModels
                 tb.TextChanging += TextChanged; //Костыль для корректного отображения горизонтального выравнивания
                 tb.KeyDown += TextFilter; //Фильтрация всех символов кроме цифр и обработка клавиши Enter
                 st.Children.Add(tb);
+                st.Children.Add(new TextBlock() { Text = middle, Height = 10, TextAlignment = TextAlignment.Center, VerticalAlignment = Avalonia.Layout.VerticalAlignment.Center });
+                tb = new TextBox() { Text = "", TextAlignment = TextAlignment.Justify, HorizontalContentAlignment = Avalonia.Layout.HorizontalAlignment.Center };
+                tb.TextChanging += TextChanged; //Костыль для корректного отображения горизонтального выравнивания
+                tb.KeyDown += TextFilter; //Фильтрация всех символов кроме цифр и обработка клавиши Enter
+                st.Children.Add(tb);
             }
-            st.Children.Add(new TextBlock() { Text = middle, Height = 10, TextAlignment = TextAlignment.Center, VerticalAlignment = Avalonia.Layout.VerticalAlignment.Center });
-            st.Children.Add(new TextBlock() { Text = list[1], Classes = { "GameTextBlock" } });
+            //st.Children.Add(new TextBlock() { Text = middle, Height = 10, TextAlignment = TextAlignment.Center, VerticalAlignment = Avalonia.Layout.VerticalAlignment.Center });
+            //st.Children.Add(new TextBlock() { Text = list[1], Classes = { "GameTextBlock" } });
             //tmpButton.Content = $"{list[0]}{middle}{list[1]}";
 
             tmpButtonTwo.Content = st;
@@ -525,11 +535,28 @@ namespace AvaloniaApplication3.ViewModels
                     {
                         if (st.Children[j] is TextBox)
                         {
-                            if ((st.Children[j] as TextBox).Text != ((((Equasion[i]as Button).Content as StackPanel).Children[j]) as TextBlock).Text)
+                            if (j < st.Children.Count - 1)
                             {
-                                IsEqusaisonIncorrect = true;
-                                GenerateEquasionIsActive = false;
-                                return;
+                                string Answer = (st.Children[j] as TextBox).Text + "/";
+                                if (st.Children[j + 2] is TextBlock)
+                                {
+                                    Answer += (st.Children[j + 2] as TextBlock).Text;
+                                }
+                                else
+                                {
+                                    Answer += (st.Children[j + 2] as TextBox).Text;
+                                }
+                                string Origin = ((((Equasion[i] as Button).Content as StackPanel).Children[j]) as TextBlock).Text + "/" + ((((Equasion[i] as Button).Content as StackPanel).Children[j + 2]) as TextBlock).Text;
+                                if (!CurrentGame.CheckEquasion(Answer, Origin))
+                                {
+                                    IsEqusaisonIncorrect = true;
+                                    GenerateEquasionIsActive = false;
+                                    return;
+                                }
+                                //if ((st.Children[j] as TextBox).Text != ((((Equasion[i]as Button).Content as StackPanel).Children[j]) as TextBlock).Text)
+                                //{
+                                //    
+                                //}
                             }
                         }
                     }

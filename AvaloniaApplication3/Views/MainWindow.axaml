@@ -40,9 +40,28 @@
 			<Button  Classes="b1" Content="Настройки" FontSize="{Binding InterfaceTextSize}" Click="Button_Click_MainMenu"/>
 			<Button  Classes="b1" Content="Выйти" FontSize="{Binding InterfaceTextSize}" Click="Button_Click_MainMenu"/>
 		</StackPanel>
-		<SplitView>
-			
-		</SplitView>
+		
+		<Panel IsVisible="False">
+		<Carousel Name="Instruction" IsVisible="True">
+			<Carousel.PageTransition>
+				<CompositePageTransition>
+					<PageSlide Duration="0:00:01.500" Orientation="Horizontal" />
+				</CompositePageTransition>
+			</Carousel.PageTransition>
+			<Carousel.Items>
+				<StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+					<TextBlock Text="Tratata" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+				</StackPanel>
+			</Carousel.Items>
+		</Carousel>
+			<Panel Margin="20">
+				<Button Background="White" Click="Next" FontSize="{Binding InterfaceTextSize}">&lt;</Button>
+				<Button Background="White" Click="Previous"	
+						HorizontalAlignment="Right" FontSize="{Binding InterfaceTextSize}">&gt;</Button>
+				<Button Content="Назад" FontSize="{Binding InterfaceTextSize}" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="10,0,0,10"/>
+			</Panel>
+		</Panel>
+		
 		<StackPanel x:Name="EquasionChoiceMenu" Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" IsVisible="False" IsEnabled="False">
 			<TextBlock Classes="ThemeTB" Text="Что ты хочешь тренировать?" FontSize="{Binding InterfaceTitleSize}"/>
 			<Button  Classes="b1" Content="Сложение" Click="Button_Click_EquasionChoice" FontSize="{Binding InterfaceTextSize}"/>
