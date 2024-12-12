@@ -9,7 +9,7 @@
 		<Border Padding="20">
 			<!-- Add Controls for Previewer Here -->
 			<StackPanel>
-				<Button Classes ="b2" Content="RataMahata"/>
+				<Button Classes ="ButtTransparent" Content="RataMahata"/>
 				<TextBlock Text="Alalalalala"/>
 			</StackPanel>
 
@@ -51,6 +51,18 @@
 			<Setter Property="Background" Value="Transparent"/>
 		</Style>
 	</Style>
+	<Style Selector="Button.ButtTransparent">
+		<Style Selector="^:selected /template/ ContentPresenter#PART_ContentPresenter">
+			<Setter Property="Background" Value="{Binding $parent[Button].Background}"/>
+		</Style>
+		<Style Selector="^:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+			<Setter Property="Background" Value="{Binding $parent[Button].Background}"/>
+			<Setter Property="BorderBrush" Value="{Binding $parent[Button].BorderBrush}"/>
+		</Style>
+		<Style Selector="^:pressed">
+			<Setter Property="RenderTransform" Value="none" />
+		</Style>
+	</Style>
 	<Style Selector="Button.b2">
 		<Setter Property="BorderBrush" Value="{DynamicResource ButtonBorderBrush}"/>
 		<Setter Property="BorderThickness" Value="1"/>
@@ -65,6 +77,16 @@
 	<Style Selector="Button.GameButtons">
 		<Setter Property="HorizontalContentAlignment" Value="Center"/>
 		<Setter Property="Background" Value="White"/>
+		<Style Selector="^:selected /template/ ContentPresenter#PART_ContentPresenter">
+			<Setter Property="Background" Value="{Binding $parent[Button].Background}"/>
+		</Style>
+		<Style Selector="^:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+			<Setter Property="Background" Value="{Binding $parent[Button].Background}"/>
+			<Setter Property="BorderBrush" Value="{Binding $parent[Button].BorderBrush}"/>
+		</Style>
+		<Style Selector="^:pressed">
+			<Setter Property="RenderTransform" Value="none" />
+		</Style>
 	</Style>
 	
 	<Style Selector="StackPanel.VerHorCenter">
@@ -75,6 +97,12 @@
 	<Style Selector="TextBlock.GameTextBlock">
 		<Setter Property="TextAlignment" Value="Center"/>
 		<Setter Property="MaxHeight" Value="{Binding InterfaceTextSize}"/>
+	</Style>
+	<Style Selector="TextBlock.InstructionTB">
+		<Setter Property="FontSize" Value="{Binding InterfaceTextSize}"/>
+		<Setter Property="TextWrapping" Value="Wrap"/>
+		<Setter Property="HorizontalAlignment" Value="Left"/>
+		<Setter Property="VerticalAlignment" Value="Center"/>
 	</Style>
 	
 </Styles>

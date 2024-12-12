@@ -14,10 +14,11 @@ namespace AvaloniaApplication3.Models
         public List<string> text = new List<string>();
         public Text_for_presentation() 
         {
-            using (FileStream fs = new FileStream($"H:\\3 курс\\GitFolder\\study\\AvaloniaApplication3\\AllRes\\JSON_Instruction.json", FileMode.OpenOrCreate))
+            using (FileStream fs = new FileStream($"AllRes/JSON_Instruction.json", FileMode.OpenOrCreate))
             {
                 text = System.Text.Json.JsonSerializer.Deserialize<List<string>>(fs);
             }
+            
         }
     }
 }

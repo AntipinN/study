@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Text.Json;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace AvaloniaApplication3.Models
@@ -25,6 +27,7 @@ namespace AvaloniaApplication3.Models
                 _IGenerator = gen;
                 _ISolver = solv;
                 _IOPZ = opz;
+
             }
 
             public List<string> GetExpression()
@@ -48,24 +51,39 @@ namespace AvaloniaApplication3.Models
                 }
                 string[] first = Answer.Split('/');
                 string[] second = Origin.Split('/');
-                if (first.Length > 1 && first[0].Length > 0)
+                if (first.Length > 1 && first[0].Length > 0 && first[1].Length > 0)
                 {
-                    Fraction Answ = new Fraction(long.Parse(first[0]), long.Parse(first[1]));
-                    Fraction Orig = new Fraction(long.Parse(second[0]), long.Parse(second[1]));
-                    if ((Answ - Orig).Numerator == 0)
+                    try
                     {
-                        return true;
+                        Fraction Answ = new Fraction(long.Parse(first[0]), long.Parse(first[1]));
+                        Fraction Orig = new Fraction(long.Parse(second[0]), long.Parse(second[1]));
+                        if ((Answ - Orig).Numerator == 0)
+                        {
+                            return true;
+                        }
+                        else
+                        {
+                            return false;
+                        }
                     }
-                    else
+                    catch (Exception e) 
                     {
-                        return false;
+                        string date = DateTime.Now.ToString();
+                        using (StreamWriter fs = new StreamWriter($"ErrorLogs/errorlog {date}.txt"))
+                        {
+                            fs.Write(e.Message);
+                        }
+                        using(FileStream fs = new FileStream($"ErrorLogs/errorlog {date}.json", FileMode.OpenOrCreate))
+                        {
+                            JsonSerializer.Serialize(fs, e);
+                        }
                     }
+                    return false;
                 }
                 else
                 {
                     return false;
                 }
-                
             }
             
         }

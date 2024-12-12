@@ -17,6 +17,32 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="AllRes\JSON_Instruction.json" />
+    <None Remove="AllRes\JSON_View.json" />
+    <None Remove="Assets\AB Icon ComSans.png" />
+    <None Remove="Assets\AB Icon ComSans2.png" />
+    <None Remove="Assets\AB Icon.png" />
+    <None Remove="Assets\AB Icon400.png" />
+    <None Remove="Assets\AB Icon64 comicSansB.png" />
+    <None Remove="Assets\ContributorsLinks.txt" />
+    <None Remove="Assets\дробь2 (2).png" />
+    <None Remove="Assets\дробь3 (2).png" />
+    <None Remove="Assets\дробь3 (3).png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="AllRes\JSON_View.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="AllRes\ContributorsLinks.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Avalonia" Version="11.1.0" />
     <PackageReference Include="Avalonia.Desktop" Version="11.1.0" />
     <PackageReference Include="Avalonia.Themes.Fluent" Version="11.1.0" />
@@ -24,5 +50,11 @@
     <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
     <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.1.0" />
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="AllRes\JSON_Instruction.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 </Project>

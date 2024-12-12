@@ -98,6 +98,33 @@ namespace AvaloniaApplication3.Models
             }
             return new Fraction(a.Numerator / gcd, a.Denominator / gcd);
         }
+        public static bool operator ==(Fraction a, Fraction b)
+        {
+            if ((a - b).Numerator == 0)
+            {
+                return true;
+            }
+            return false;
+
+        }
+        public static bool operator !=(Fraction a, Fraction b)
+        {
+            if ((a - b).Numerator != 0)
+            {
+                return true;
+            }
+            return false;
+
+        }
+
+        public bool Equals(Fraction a, Fraction b)                             //переопределяем сравнение для данного класса
+        {
+            if ((a - b).Numerator == 0)
+            {
+                return true;
+            }
+            return false;
+        }
 
         static long GCD(long a, long b)
         {
@@ -110,7 +137,10 @@ namespace AvaloniaApplication3.Models
             }
             return a;
         }
-
+        public long GcD(long a, long b)
+        {
+            return GCD(a, b);
+        }
         public override string ToString()
         {
             return $"{Numerator.ToString()}\n" + '/' + $"\n{Denominator.ToString()}";

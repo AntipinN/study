@@ -7,8 +7,9 @@
 		MinWidth="300" MinHeight="400"
         x:Class="AvaloniaApplication3.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
-        Icon="/Assets/avalonia-logo.ico"
-        Title="AvaloniaApplication3">
+        Icon="/Assets/AB Icon ComSans2.png"
+        Title="AvaloniaApplication3"
+		x:Name="TheWindow">
 
 	<Design.DataContext>
 		<!-- This only sets the DataContext for the previewer in an IDE,
@@ -36,30 +37,46 @@
 		<StackPanel x:Name="MainMenu" Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" IsVisible="True" IsEnabled="True">
 			<TextBlock Classes="ThemeTB" Text="Великий тренер дробей!" FontSize="{Binding InterfaceTitleSize}"/>
 			<Button  Classes="b1" Content="Играть" FontSize="{Binding InterfaceTextSize}" Click="Button_Click_MainMenu"/>
-			<Button  Classes="b1" Content="Инструкция" FontSize="{Binding InterfaceTextSize}" Click="Button_Click_MainMenu"/>
+			<Button  Classes="b1" Content="Инструкция" FontSize="{Binding InterfaceTextSize}" Click="Button_Click_MainMenu" Command="{Binding GetInstructionCommand}"/>
 			<Button  Classes="b1" Content="Настройки" FontSize="{Binding InterfaceTextSize}" Click="Button_Click_MainMenu"/>
 			<Button  Classes="b1" Content="Выйти" FontSize="{Binding InterfaceTextSize}" Click="Button_Click_MainMenu"/>
 		</StackPanel>
 		
-		<Panel IsVisible="False">
-		<Carousel Name="Instruction" IsVisible="True">
-			<Carousel.PageTransition>
-				<CompositePageTransition>
-					<PageSlide Duration="0:00:01.500" Orientation="Horizontal" />
-				</CompositePageTransition>
-			</Carousel.PageTransition>
-			<Carousel.Items>
-				<StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
-					<TextBlock Text="Tratata" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-				</StackPanel>
-			</Carousel.Items>
-		</Carousel>
-			<Panel Margin="20">
-				<Button Background="White" Click="Next" FontSize="{Binding InterfaceTextSize}">&lt;</Button>
-				<Button Background="White" Click="Previous"	
-						HorizontalAlignment="Right" FontSize="{Binding InterfaceTextSize}">&gt;</Button>
-				<Button Content="Назад" FontSize="{Binding InterfaceTextSize}" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="10,0,0,10"/>
-			</Panel>
+		<Panel x:Name= "InstructionMenu" IsVisible="False" Margin="20">
+				<Button Background="White" Click="Previous" FontSize="{Binding InterfaceTextSize}">&lt;</Button>
+				<Button Background="White" Click="Next" HorizontalAlignment="Right" FontSize="{Binding InterfaceTextSize}">&gt;</Button>
+				<Grid HorizontalAlignment="Stretch" VerticalAlignment="" Width="" ShowGridLines="False">
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="auto"/>
+						<ColumnDefinition Width="*"/>
+						<ColumnDefinition Width="*"/>
+					</Grid.ColumnDefinitions>
+					<Grid.RowDefinitions>
+						<RowDefinition/>
+						<RowDefinition/>
+					</Grid.RowDefinitions>
+					<Carousel Grid.Column="0" IsVisible="False" Grid.ColumnSpan="3" x:Name="InstructionView" Margin="10,0,0,0" HorizontalAlignment="Center" ItemsSource="{Binding ViewBlockInstruction}">
+						<Carousel.Items>
+							<!--<TextBlock Text="Здравствуйте!" TextWrapping="Wrap" FontSize="{Binding InterfaceTextSize}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="20,0,0,0"/>-->
+							<!--<TextBlock Text="Сейчас мы вспомним, что такое дроби!" TextWrapping="Wrap" FontSize="{Binding InterfaceTextSize}" VerticalAlignment="Center" Margin="20,0,0,0"/>-->
+						</Carousel.Items>
+					</Carousel>
+					<Button Grid.Column="0" Grid.Row="1" Content="Назад" Click="Button_Click_BackFromInstructionMenu" FontSize="{Binding InterfaceTextSize}" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="0,0,0,0"/>
+					
+					<Button Classes="ButtTransparent" Background="White" BorderThickness="3" Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="1" SizeChanged="TextBlock_SizeChanged_ChangeTextBlockWidth" VerticalAlignment="Bottom" HorizontalAlignment="Stretch" Margin="0,0,40,55" IsHitTestVisible="False">
+						<StackPanel VerticalAlignment="Bottom" Margin="3" Orientation="Horizontal" HorizontalAlignment="Stretch">
+							<Image x:Name="TeachersImage" Source="/Assets/teacher.png" Width="170"/>
+							<Carousel x:Name="InstructionText" FontSize="{Binding InterfaceTextSize}" IsVisible="True" Margin="10,0,0,0" HorizontalAlignment="Center" ItemsSource="{Binding TextBlockInstruction}">
+								<Carousel.Items>
+									<!--<TextBlock Text="Здравствуйте!"  TextWrapping="Wrap" FontSize="{Binding InterfaceTextSize}" VerticalAlignment="Center" Margin="20,0,0,0"/>-->
+									<!--<TextBlock Text="Сейчас мы вспомним, что такое дроби!" Opacity="0" TextWrapping="Wrap" FontSize="{Binding InterfaceTextSize}" VerticalAlignment="Center" Margin="20,0,0,0"/>-->
+								</Carousel.Items>
+							</Carousel>
+						</StackPanel>
+					</Button>
+					
+				</Grid>
+				
 		</Panel>
 		
 		<StackPanel x:Name="EquasionChoiceMenu" Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" IsVisible="False" IsEnabled="False">

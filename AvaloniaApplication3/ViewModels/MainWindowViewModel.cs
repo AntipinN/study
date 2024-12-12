@@ -14,12 +14,14 @@ using System;
 using Avalonia.VisualTree;
 using System.Threading;
 using System.Diagnostics;
+using System.Net.Mime;
 using Avalonia.Threading;
 using System.Timers;
 using Avalonia.Controls.Platform;
 using System.Text;
 using System.Text.RegularExpressions;
 using Avalonia.Input;
+using Avalonia.Layout;
 
 namespace AvaloniaApplication3.ViewModels
 {
@@ -46,6 +48,9 @@ namespace AvaloniaApplication3.ViewModels
             VerifyAnswerCommand = new RelayCommand(VerifyAnswer);
             
             EndGameCommand = new RelayCommand(EndGame);
+
+            GetInstructionCommand = new RelayCommand(GetInstructionFromData);
+            GetInstructionFromData();
         }
 
 
@@ -80,7 +85,45 @@ namespace AvaloniaApplication3.ViewModels
         #endregion
 
         #endregion
+        
+        #region Instruction
 
+        [ObservableProperty] 
+        private Text_for_presentation instructionText;
+
+        [ObservableProperty] 
+        private List<TextBlock> textBlockInstruction = new List<TextBlock>();
+
+        [ObservableProperty]
+        private List<TextBlock> viewBlockInstruction = new List<TextBlock>();
+
+        void GetInstructionFromData()
+        {
+            if (InstructionText is null)
+            {
+                InstructionText = new Text_for_presentation();
+                for (int i = 0; i < InstructionText.text.Count; i++)
+                {
+                    TextBlock tb = new TextBlock()
+                    {
+                        Classes = { "InstructionTB" },
+                        Text = InstructionText.text[i]
+                        
+                    };
+                    TextBlockInstruction.Add(tb);
+
+                    tb = new TextBlock()
+                    {
+                        Classes = { "InstructionTB" },
+                        Text = InstructionText.text[i]
+                    };
+                    ViewBlockInstruction.Add(tb);
+                    //Thread.Sleep(50);
+                }
+            }
+        }
+        
+        #endregion
 
         #region Game Data
         List<int> gameTime = new List<int>();
@@ -146,6 +189,9 @@ namespace AvaloniaApplication3.ViewModels
         public ICommand VerifyAnswerCommand { get; }
 
         public ICommand EndGameCommand { get; }
+
+        public ICommand GetInstructionCommand { get; }
+
         #endregion
 
         #region Methods Region

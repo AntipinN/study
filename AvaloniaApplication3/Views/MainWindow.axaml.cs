@@ -9,8 +9,8 @@ using AvaloniaApplication3.ViewModels;
 using System;
 using System.ComponentModel;
 using System.Linq;
+using System.Security.Cryptography;
 using Tmds.DBus.Protocol;
-using Avalonia.Input;
 
 namespace AvaloniaApplication3.Views
 {
@@ -20,12 +20,14 @@ namespace AvaloniaApplication3.Views
         public MainWindow()
         {
             InitializeComponent();
+            InstructionView.PageTransition = new CustomFade(new TimeSpan(5000000));
+            InstructionText.PageTransition = new CustomFade(new TimeSpan(5000000));
         }
         private void Button_Click_MainMenu(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
         {
             switch ((sender as Button).Content.ToString())
             {
-                case "Èãðàòü":
+                case "Ð˜Ð³Ñ€Ð°Ñ‚ÑŒ":
                     {
                         MainMenu.IsVisible = false;
                         MainMenu.IsEnabled = false;
@@ -33,11 +35,14 @@ namespace AvaloniaApplication3.Views
                         EquasionChoiceMenu.IsEnabled= true;
                         break;
                     }
-                case "Èíñòðóêöèÿ":
+                case "Ð˜Ð½ÑÑ‚Ñ€ÑƒÐºÑ†Ð¸Ñ":
                     {
+                        MainMenu.IsVisible = false;
+                        InstructionText.SelectedIndex = 0;
+                        InstructionMenu.IsVisible = true;
                         break;
                     }
-                case "Íàñòðîéêè":
+                case "ÐÐ°ÑÑ‚Ñ€Ð¾Ð¹ÐºÐ¸":
                     {
                         MainMenu.IsVisible = false;
                         MainMenu.IsEnabled = false;
@@ -45,7 +50,7 @@ namespace AvaloniaApplication3.Views
                         SettingsMenu.IsEnabled = true;
                         break;
                     }
-                case "Âûéòè":
+                case "Ð’Ñ‹Ð¹Ñ‚Ð¸":
                     {
                         Environment.Exit(0);
                         break;
@@ -54,22 +59,28 @@ namespace AvaloniaApplication3.Views
             FocusManager?.ClearFocus();
         }
 
+        private void Button_Click_BackFromInstructionMenu(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+        {
+            InstructionMenu.IsVisible = false;
+            MainMenu.IsVisible = true;
+        }
+
         private void Button_Click_Settings(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
         {
             switch((sender as Button).Content.ToString())
             {
-                case "Ïðèìåíèòü":
+                case "ÐŸÑ€Ð¸Ð¼ÐµÐ½Ð¸Ñ‚ÑŒ":
                     {
                         break;
                     }
-                case "Ïî óìîë÷àíèþ":
+                case "ÐŸÐ¾ ÑƒÐ¼Ð¾Ð»Ñ‡Ð°Ð½Ð¸ÑŽ":
                     {
                         TextSize.Value = 26;
                         SoundSize.Value = 5;
                         MusicSize.Value = 5;
                         break;
                     }
-                case "Íàçàä":
+                case "ÐÐ°Ð·Ð°Ð´":
                     {
                         SettingsMenu.IsVisible = false;
                         SettingsMenu.IsEnabled = false;
@@ -85,7 +96,7 @@ namespace AvaloniaApplication3.Views
         {
             switch ((sender as Button).Content.ToString())
             {
-                case "Ñëîæåíèå":
+                case "Ð¡Ð»Ð¾Ð¶ÐµÐ½Ð¸Ðµ":
                     {
                         EquasionChoiceMenu.IsVisible = false;
                         EquasionChoiceMenu.IsEnabled = false;
@@ -93,7 +104,7 @@ namespace AvaloniaApplication3.Views
                         SummMenu.IsEnabled = true;
                         break;
                     }
-                case "Âû÷èòàíèe":
+                case "Ð’Ñ‹Ñ‡Ð¸Ñ‚Ð°Ð½Ð¸e":
                     {
                         EquasionChoiceMenu.IsVisible = false;
                         EquasionChoiceMenu.IsEnabled = false;
@@ -101,7 +112,7 @@ namespace AvaloniaApplication3.Views
                         SubtractMenu.IsEnabled = true;
                         break;
                     }
-                case "Óìíîæåíèå":
+                case "Ð£Ð¼Ð½Ð¾Ð¶ÐµÐ½Ð¸Ðµ":
                     {
                         EquasionChoiceMenu.IsVisible = false;
                         EquasionChoiceMenu.IsEnabled = false;
@@ -124,7 +135,7 @@ namespace AvaloniaApplication3.Views
         private void Button_Click_DifficultyMenu(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
         {
             ((sender as Button).Parent as StackPanel).IsVisible = false;
-            if ((sender as Button).Content.ToString() == "Íàçàä")
+            if ((sender as Button).Content.ToString() == "ÐÐ°Ð·Ð°Ð´")
             {
                 EquasionChoiceMenu.IsVisible = true;
                 EquasionChoiceMenu.IsEnabled = true;
@@ -177,14 +188,46 @@ namespace AvaloniaApplication3.Views
             FocusManager?.ClearFocus();
         }
 
-        public void Next(object source, RoutedEventArgs args)
+        public void Next(object sender, RoutedEventArgs args)
         {
-            Instruction.Next();
+            if (InstructionText.Items.Count-1 > InstructionText.SelectedIndex)
+            {
+                InstructionText.SelectedIndex++;
+                InstructionView.SelectedIndex++;
+            }
+            TextBlock_SizeChanged_ChangeTextBlockWidth(this, new Avalonia.Controls.SizeChangedEventArgs(null));
         }
 
-        public void Previous(object source, RoutedEventArgs args)
+        public void Previous(object sender, RoutedEventArgs args)
         {
-            Instruction.Previous();
+            if (InstructionText.SelectedIndex > 0)
+            {
+                InstructionText.SelectedIndex--;
+                InstructionView.SelectedIndex--;
+            }
+            TextBlock_SizeChanged_ChangeTextBlockWidth(this, new Avalonia.Controls.SizeChangedEventArgs(null));
         }
+
+        public void TextBlock_SizeChanged_ChangeTextBlockWidth(object? sender, Avalonia.Controls.SizeChangedEventArgs e)
+        {
+            
+            //if(sender is not null &&
+            //    (sender as TextBlock).Parent is Carousel &&
+            //    ((sender as TextBlock).Parent as Carousel).Parent is StackPanel &&
+            //    (((sender as TextBlock).Parent as Carousel).Parent as StackPanel).Parent is Button &&
+            //    ((((sender as TextBlock).Parent as Carousel).Parent as StackPanel).Parent as Button).Parent is Grid &&
+            //    (((((sender as TextBlock).Parent as Carousel).Parent as StackPanel).Parent as Button).Parent as Grid).Parent is Panel &&
+            //    ((((((sender as TextBlock).Parent as Carousel).Parent as StackPanel).Parent as Button).Parent as Grid).Parent as Panel).Parent is Grid &&
+            //    (((((((sender as TextBlock).Parent as Carousel).Parent as StackPanel).Parent as Button).Parent as Grid).Parent as Panel).Parent as Grid).Parent is Window
+            //    )
+            //(sender as TextBlock).MinWidth = ((((((((sender as TextBlock).Parent as Carousel).Parent as StackPanel).Parent as Button).Parent as Grid).Parent as Panel).Parent as Grid).Parent as Window).Width - 300 - 20;
+            foreach(TextBlock tb in InstructionText.Items)
+            {
+                tb.Width = TheWindow.Width - TeachersImage.Width - 205;
+            }
+            
+        }
+
+
     }
 }
