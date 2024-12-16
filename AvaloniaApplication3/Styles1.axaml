@@ -1,0 +1,109 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:vm="using:AvaloniaApplication3.ViewModels"
+		xmlns:fluent="using:AvaloniaApplication3"
+		x:DataType="vm:MainWindowViewModel">
+
+	
+	<Design.PreviewWith>
+		<Border Padding="20">
+			<!-- Add Controls for Previewer Here -->
+			<StackPanel>
+				<Button Classes ="GameButtons" Content="RataMahata"/>
+				<TextBlock Text="Alalalalala"/>
+			</StackPanel>
+
+		</Border>
+	</Design.PreviewWith>
+
+	<!-- Add Styles Here -->
+	<Styles.Resources>
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceInclude Source="/AllRes/AllResourceDictionary.axaml"/>
+			</ResourceDictionary.MergedDictionaries>
+		</ResourceDictionary>
+	</Styles.Resources>
+	<Style Selector="Button.b4">
+		<Setter Property="BorderBrush" Value="#ff8961cc"/>
+		<Setter Property="BorderThickness" Value="3"/>
+		<Style Selector="^:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+			<Setter Property="Background" Value="White" />
+			<Setter Property="BorderBrush" Value="Blue" />
+			<Setter Property="Foreground" Value="Black" />
+		</Style>
+	</Style>
+	<Style Selector="TextBlock.ThemeTB">
+		<Setter Property="HorizontalAlignment" Value="Center"/>
+		<Setter Property="Margin" Value="30"/>
+		<Setter Property="TextWrapping" Value="Wrap"/>
+		<Setter Property="TextAlignment" Value="Center"/>
+	</Style>
+	<Style Selector="Button.b1">
+		<Setter Property="HorizontalAlignment" Value="Center"/>
+		<Setter Property="Margin" Value="0,0,0,10"/>
+	</Style>
+	<Style Selector="ListBox.LBTransparent">
+		<Style Selector="^:selected /template/ ContentPresenter#PART_ContentPresenter">
+			<Setter Property="Background" Value="Transparent"/>
+		</Style>
+		<Style Selector="^:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+			<Setter Property="Background" Value="Transparent"/>
+		</Style>
+	</Style>
+	<Style Selector="Button.ButtTransparent">
+		<Style Selector="^:selected /template/ ContentPresenter#PART_ContentPresenter">
+			<Setter Property="Background" Value="{Binding $parent[Button].Background}"/>
+		</Style>
+		<Style Selector="^:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+			<Setter Property="Background" Value="{Binding $parent[Button].Background}"/>
+			<Setter Property="BorderBrush" Value="{Binding $parent[Button].BorderBrush}"/>
+		</Style>
+		<Style Selector="^:pressed">
+			<Setter Property="RenderTransform" Value="none" />
+		</Style>
+	</Style>
+	<Style Selector="Button.b2">
+		<Setter Property="BorderBrush" Value="{DynamicResource ButtonBorderBrush}"/>
+		<Setter Property="BorderThickness" Value="1"/>
+		<Style Selector="^:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+			<Setter Property="Background" Value="{DynamicResource PointOverButtonBackground}" />
+		</Style>
+		<Style Selector="^:pressed /template/ ContentPresenter#PART_ContentPresenter">
+			<Setter Property="Background" Value="{DynamicResource PressedBackgroundBrush}" />
+		</Style>
+	</Style>
+
+	<Style Selector="Button.GameButtons">
+		<Setter Property="HorizontalContentAlignment" Value="Center"/>
+		<Setter Property="Background" Value="{DynamicResource BackgroundBrush}"/>
+		<Style Selector="^:selected /template/ ContentPresenter#PART_ContentPresenter">
+			<Setter Property="Background" Value="{Binding $parent[Button].Background}"/>
+		</Style>
+		<Style Selector="^:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+			<Setter Property="Background" Value="{Binding $parent[Button].Background}"/>
+			<Setter Property="BorderBrush" Value="{Binding $parent[Button].BorderBrush}"/>
+		</Style>
+		<Style Selector="^:pressed">
+			<Setter Property="RenderTransform" Value="none" />
+		</Style>
+	</Style>
+	
+	<Style Selector="StackPanel.VerHorCenter">
+		<Setter Property="HorizontalAlignment" Value="Center"/>
+		<Setter Property="VerticalAlignment" Value="Center"/>
+	</Style>
+
+	<Style Selector="TextBlock.GameTextBlock">
+		<Setter Property="TextAlignment" Value="Center"/>
+		<Setter Property="MaxHeight" Value="{Binding InterfaceTitleSize}"/>
+	</Style>
+	<Style Selector="TextBlock.InstructionTB">
+		<Setter Property="Background" Value="{DynamicResource BackgroundBrush}"/>
+		<Setter Property="FontSize" Value="{Binding InterfaceTextSize}"/>
+		<Setter Property="TextWrapping" Value="Wrap"/>
+		<Setter Property="HorizontalAlignment" Value="Left"/>
+		<Setter Property="VerticalAlignment" Value="Center"/>
+	</Style>
+	
+</Styles>

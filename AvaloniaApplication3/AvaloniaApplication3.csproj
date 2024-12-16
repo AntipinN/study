@@ -1,0 +1,81 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <SignAssembly>True</SignAssembly>
+    <AssemblyOriginatorKeyFile>C:\Users\Betrikkolo\source\ivDri.snk</AssemblyOriginatorKeyFile>
+    <PublishAot>False</PublishAot>
+    <RootNamespace></RootNamespace>
+    <AssemblyName></AssemblyName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DebugType>embedded</DebugType>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DebugType>embedded</DebugType>
+  </PropertyGroup>
+  <PropertyGroup Label="Avalonia">
+    <AvaloniaXamlVerboseExceptions>False</AvaloniaXamlVerboseExceptions>
+    <ApplicationIcon>Assets\AB Icon ComSans2.ico</ApplicationIcon>
+    <AssemblyVersion>0.1.0.0</AssemblyVersion>
+    <FileVersion>0.1.0.0</FileVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+	<AvaloniaResource Include="**/*.xaml" />
+	<AvaloniaResource Include="**/*.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <AvaloniaResource Include="Assets\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="AllRes\FRACTIONS.json" />
+    <None Remove="AllRes\JSON_Instruction.json" />
+    <None Remove="AllRes\JSON_View.json" />
+    <None Remove="AllRes\Settings.json" />
+    <None Remove="Assets\AB Icon ComSans.png" />
+    <None Remove="Assets\AB Icon ComSans2.ico" />
+    <None Remove="Assets\AB Icon ComSans2.png" />
+    <None Remove="Assets\AB Icon.png" />
+    <None Remove="Assets\AB Icon400.png" />
+    <None Remove="Assets\AB Icon64 comicSansB.png" />
+    <None Remove="Assets\ContributorsLinks.txt" />
+    <None Remove="Assets\дробь2 (2).png" />
+    <None Remove="Assets\дробь3 (2).png" />
+    <None Remove="Assets\дробь3 (3).png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="AllRes\ContributorsLinks.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="AllRes\FRACTIONS.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="AllRes\Settings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\AB Icon ComSans2.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Avalonia" Version="11.1.0" />
+    <PackageReference Include="Avalonia.Desktop" Version="11.1.0" />
+    <PackageReference Include="Avalonia.Themes.Fluent" Version="11.1.0" />
+    <PackageReference Include="Avalonia.Fonts.Inter" Version="11.1.0" />
+    <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
+    <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.1.0" />
+	 <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="AllRes\JSON_Instruction.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+</Project>
