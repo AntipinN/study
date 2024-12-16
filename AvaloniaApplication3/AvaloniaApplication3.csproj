@@ -5,6 +5,23 @@
     <Nullable>enable</Nullable>
     <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
     <ApplicationManifest>app.manifest</ApplicationManifest>
+    <SignAssembly>True</SignAssembly>
+    <AssemblyOriginatorKeyFile>C:\Users\Betrikkolo\source\ivDri.snk</AssemblyOriginatorKeyFile>
+    <PublishAot>False</PublishAot>
+    <RootNamespace></RootNamespace>
+    <AssemblyName></AssemblyName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DebugType>embedded</DebugType>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DebugType>embedded</DebugType>
+  </PropertyGroup>
+  <PropertyGroup Label="Avalonia">
+    <AvaloniaXamlVerboseExceptions>False</AvaloniaXamlVerboseExceptions>
+    <ApplicationIcon>Assets\AB Icon ComSans2.ico</ApplicationIcon>
+    <AssemblyVersion>0.1.0.0</AssemblyVersion>
+    <FileVersion>0.1.0.0</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>
@@ -17,9 +34,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="AllRes\FRACTIONS.json" />
     <None Remove="AllRes\JSON_Instruction.json" />
     <None Remove="AllRes\JSON_View.json" />
+    <None Remove="AllRes\Settings.json" />
     <None Remove="Assets\AB Icon ComSans.png" />
+    <None Remove="Assets\AB Icon ComSans2.ico" />
     <None Remove="Assets\AB Icon ComSans2.png" />
     <None Remove="Assets\AB Icon.png" />
     <None Remove="Assets\AB Icon400.png" />
@@ -31,15 +51,16 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="AllRes\JSON_View.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-
-  <ItemGroup>
     <Content Include="AllRes\ContributorsLinks.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="AllRes\FRACTIONS.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="AllRes\Settings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\AB Icon ComSans2.ico" />
   </ItemGroup>
 
   <ItemGroup>
@@ -49,7 +70,7 @@
     <PackageReference Include="Avalonia.Fonts.Inter" Version="11.1.0" />
     <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
     <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.1.0" />
-    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.1" />
+	 <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.1" />
   </ItemGroup>
 
   <ItemGroup>

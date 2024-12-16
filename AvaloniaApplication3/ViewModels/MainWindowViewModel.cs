@@ -1,10 +1,7 @@
 ﻿using Avalonia.Controls;
-using Avalonia.Interactivity;
 using Avalonia.Media;
-using Avalonia.Rendering.Composition;
 using AvaloniaApplication3.Models;
 using static AvaloniaApplication3.Models.SumOfFractionGame;
-using AvaloniaApplication3.Views;
 using CommunityToolkit.Mvvm.ComponentModel;
 using System.Collections.Generic;
 using System.Windows.Input;
@@ -12,16 +9,16 @@ using CommunityToolkit.Mvvm.Input;
 using System.Linq;
 using System;
 using Avalonia.VisualTree;
-using System.Threading;
 using System.Diagnostics;
-using System.Net.Mime;
 using Avalonia.Threading;
-using System.Timers;
-using Avalonia.Controls.Platform;
 using System.Text;
 using System.Text.RegularExpressions;
 using Avalonia.Input;
 using Avalonia.Layout;
+using Avalonia;
+using System.IO;
+using System.Text.Json;
+using Avalonia.Styling;
 
 namespace AvaloniaApplication3.ViewModels
 {
@@ -29,28 +26,35 @@ namespace AvaloniaApplication3.ViewModels
     {
         public MainWindowViewModel()
         {
-            GenerateTimer();
+            //SettingsSerializer();
             
+            SettingsInit();
+            GenerateTimer();
+
             CreateGameCommand = new RelayCommand(ContuneGame);
 
             CreateEasySumGameCommand = new RelayCommand(CreateEasySumGame);
             CreateEasySubtractGameCommand = new RelayCommand(CreateEasySubtractGame);
             CreateEasyMultiplyGameCommand = new RelayCommand(CreateEasyMultiplyGame);
-            
+
             CreateMediumSumGameCommand = new RelayCommand(CreateMediumSumGame);
             CreateMediumSubtractGameCommand = new RelayCommand(CreateMediumSubtractGame);
             CreateMediumMultiplyGameCommand = new RelayCommand(CreateMediumMultiplyGame);
-            
+
             CreateHardSumGameCommand = new RelayCommand(CreateHardSumGame);
             CreateHardSubtractGameCommand = new RelayCommand(CreateHardSubtractGame);
             CreateHardMultiplyGameCommand = new RelayCommand(CreateHardMultiplyGame);
 
             VerifyAnswerCommand = new RelayCommand(VerifyAnswer);
-            
+
             EndGameCommand = new RelayCommand(EndGame);
 
+            SetSettings = new RelayCommand(setSettings);
+            UpdateVisualValue = new RelayCommand(UpdateValue);
+            SetDefaultValuesForSettings = new RelayCommand(SetDefaultSettings);
             GetInstructionCommand = new RelayCommand(GetInstructionFromData);
             GetInstructionFromData();
+            
         }
 
 
@@ -63,7 +67,7 @@ namespace AvaloniaApplication3.ViewModels
         partial void OnInterfaceTextSizeChanging(int value)
         {
             InterfaceTitleSize = value + 12;
-
+            InterfaceTextSizeChanging = value;
         }
         [ObservableProperty]
         private int interfaceTitleSize = 26 + 12;
@@ -71,7 +75,104 @@ namespace AvaloniaApplication3.ViewModels
         private int soundSize = 5;
         [ObservableProperty]
         private int musicSize = 5;
+        [ObservableProperty]
+        private int interfaceTextSizeChanging = 26;
+        void setSettings()
+        {
+            InterfaceTextSize = InterfaceTextSizeChanging;
+            if (LightTheme)
+            {
+                ThemeVary = Avalonia.Styling.ThemeVariant.Light;
+            }
+            else if (DarkTheme)
+            {
+                ThemeVary = Avalonia.Styling.ThemeVariant.Dark;
+            }
+            else
+            {
+                ThemeVary = Avalonia.Styling.ThemeVariant.Default;
+            }
+            UpdateValue();
+            SettingsSerializer();
+        }
+        void UpdateValue()
+        {
+            InterfaceTextSizeChanging = InterfaceTextSize;
+            if (ThemeVary == ThemeVariant.Light)
+            {
+                LightTheme = true;
+                DefaultTheme = false;
+                DarkTheme = false;
+               
+            }
+            else if (ThemeVary == ThemeVariant.Dark)
+            {
+                DarkTheme = true;
+                LightTheme = false;
+                DefaultTheme = false;
+            }
+            else
+            {
+                DefaultTheme = true;
+                DarkTheme = false;
+                LightTheme = false;
+            }
+            
+        }
+        void SetDefaultSettings()
+        {
+            InterfaceTextSize = 26;
+            InterfaceTextSizeChanging = InterfaceTextSize;
+            ThemeVary = Avalonia.Styling.ThemeVariant.Default;
+            UpdateValue();
+            SettingsSerializer();
+        }
 
+        [ObservableProperty]
+        Avalonia.Styling.ThemeVariant themeVary = ThemeVariant.Default;
+        [ObservableProperty]
+        bool lightTheme = false;
+        [ObservableProperty]
+        bool darkTheme = false;
+        [ObservableProperty]
+        bool defaultTheme = true;
+        void SettingsInit()
+        {
+            SettingsClass settings;
+            using (FileStream fs = new FileStream("AllRes/Settings.json", FileMode.OpenOrCreate))
+            {
+                settings = JsonSerializer.Deserialize<SettingsClass>(fs);
+            }
+            
+            InterfaceTextSize = settings.InterfaceTextSize;
+            //ThemeVary = settings.Theme;
+            if (ThemeVary == ThemeVariant.Default)
+            {
+                DefaultTheme = true;
+                DarkTheme = false;
+                LightTheme = false;
+            }
+            else if (ThemeVary == ThemeVariant.Light)
+            {
+                LightTheme = true;
+                DefaultTheme = false;
+                DarkTheme = false;
+            }
+            else
+            {
+                DarkTheme = true;
+                LightTheme = false;
+                DefaultTheme = false;
+            }
+        }
+        void SettingsSerializer()
+        {
+            SettingsClass settings = new SettingsClass(InterfaceTextSize, ThemeVary);
+            using (FileStream fs = new FileStream("AllRes/Settings.json", FileMode.Create))
+            {
+                JsonSerializer.Serialize(fs, settings);
+            }
+        }
         #region Menu Locale
         [ObservableProperty]
         string easy = "Лёгкий";
@@ -95,7 +196,7 @@ namespace AvaloniaApplication3.ViewModels
         private List<TextBlock> textBlockInstruction = new List<TextBlock>();
 
         [ObservableProperty]
-        private List<TextBlock> viewBlockInstruction = new List<TextBlock>();
+        private List<WrapPanel> viewBlockInstruction = new List<WrapPanel>();
 
         void GetInstructionFromData()
         {
@@ -112,12 +213,48 @@ namespace AvaloniaApplication3.ViewModels
                     };
                     TextBlockInstruction.Add(tb);
 
-                    tb = new TextBlock()
+                    WrapPanel s = new WrapPanel() { Orientation = Orientation.Horizontal, Classes = { "VerHorAllCenter" } };
+                    
+                    foreach(string w in InstructionText.view[i])
                     {
-                        Classes = { "InstructionTB" },
-                        Text = InstructionText.text[i]
-                    };
-                    ViewBlockInstruction.Add(tb);
+                        Button button;
+                        
+                        
+                        Regex regex = new Regex(@"(\(?[a-zA-Z0-9]+((∗|\+|\-)?[a-zA-Z0-9]+)*\)?/\(?[a-zA-Z0-9]+((∗|\+|\-)?[a-zA-Z0-9]+)*\)?)|([0-9]+/[0-9]+)|([<]*[=]+[>]*|([0-9]+))|([;])|([a-zA-Z]/[a-zA-Z])");
+                        if (w.Length > 0)
+                        {
+                            bool entered = false;
+                            foreach (Match contentElement in regex.Matches(w))
+                            {
+                                Thickness margin = new Thickness(1,0,1,0);
+                                button = new Button() { Classes = { "GameButtons" }, Margin = margin };
+                                StackPanel sp = new StackPanel();
+                                if (contentElement.ToString().Contains('/'))
+                                {
+                                    string[] wm = contentElement.ToString().Split(new char[] { '/', '(', ')' }, StringSplitOptions.RemoveEmptyEntries);
+                                    string middle = string.Concat(Enumerable.Repeat("―", Math.Max(wm[0].Length, wm[1].Length)));
+                                    sp.Children.Add(new TextBlock() { Text = wm[0], Classes = { "GameTextBlock" } });
+                                    sp.Children.Add(new TextBlock() { Text = middle, Height = 10, TextAlignment = TextAlignment.Center, VerticalAlignment = Avalonia.Layout.VerticalAlignment.Center });
+                                    sp.Children.Add(new TextBlock() { Text = wm[1], Classes = { "GameTextBlock" } });
+                                    button.Content = sp;
+                                }
+                                else
+                                {
+                                    button.Content = new TextBlock() { Text = contentElement.ToString(), Classes = { "GameTextBlock" }, VerticalAlignment = VerticalAlignment.Center };
+                                }
+                                s.Children.Add(button);
+                                entered = true;
+                            }
+                           if(!entered)
+                            {
+                                button = new Button() { Classes = { "GameButtons" } };
+                                button.Content = new TextBlock() { Text = new string(w), Classes = { "GameTextBlock" }, VerticalAlignment = VerticalAlignment.Center };
+                                s.Children.Add(button);
+                                
+                            }
+                        }
+                    }
+                    ViewBlockInstruction.Add(s);
                     //Thread.Sleep(50);
                 }
             }
@@ -192,6 +329,10 @@ namespace AvaloniaApplication3.ViewModels
 
         public ICommand GetInstructionCommand { get; }
 
+        public ICommand SetSettings { get; }
+        public ICommand UpdateVisualValue { get; }
+
+        public ICommand SetDefaultValuesForSettings { get; }
         #endregion
 
         #region Methods Region

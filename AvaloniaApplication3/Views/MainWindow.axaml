@@ -4,11 +4,11 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-		MinWidth="300" MinHeight="400"
+		MinWidth="600" MinHeight="600"
         x:Class="AvaloniaApplication3.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
         Icon="/Assets/AB Icon ComSans2.png"
-        Title="AvaloniaApplication3"
+        Title="Тренер дробей"
 		x:Name="TheWindow">
 
 	<Design.DataContext>
@@ -43,8 +43,8 @@
 		</StackPanel>
 		
 		<Panel x:Name= "InstructionMenu" IsVisible="False" Margin="20">
-				<Button Background="White" Click="Previous" FontSize="{Binding InterfaceTextSize}">&lt;</Button>
-				<Button Background="White" Click="Next" HorizontalAlignment="Right" FontSize="{Binding InterfaceTextSize}">&gt;</Button>
+				<Button Background="{DynamicResource BackgroundBrush}" Click="Previous" FontSize="{Binding InterfaceTextSize}">&lt;</Button>
+				<Button Background="{DynamicResource BackgroundBrush}" Click="Next" HorizontalAlignment="Right" FontSize="{Binding InterfaceTextSize}">&gt;</Button>
 				<Grid HorizontalAlignment="Stretch" VerticalAlignment="" Width="" ShowGridLines="False">
 					<Grid.ColumnDefinitions>
 						<ColumnDefinition Width="auto"/>
@@ -55,7 +55,7 @@
 						<RowDefinition/>
 						<RowDefinition/>
 					</Grid.RowDefinitions>
-					<Carousel Grid.Column="0" IsVisible="False" Grid.ColumnSpan="3" x:Name="InstructionView" Margin="10,0,0,0" HorizontalAlignment="Center" ItemsSource="{Binding ViewBlockInstruction}">
+					<Carousel Grid.Column="0" IsVisible="true" Grid.ColumnSpan="3" x:Name="InstructionView" FontSize="{Binding InterfaceTextSize}" Margin="10,0,0,0" HorizontalAlignment="Center" ItemsSource="{Binding ViewBlockInstruction}" VerticalAlignment="Center">
 						<Carousel.Items>
 							<!--<TextBlock Text="Здравствуйте!" TextWrapping="Wrap" FontSize="{Binding InterfaceTextSize}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="20,0,0,0"/>-->
 							<!--<TextBlock Text="Сейчас мы вспомним, что такое дроби!" TextWrapping="Wrap" FontSize="{Binding InterfaceTextSize}" VerticalAlignment="Center" Margin="20,0,0,0"/>-->
@@ -63,7 +63,7 @@
 					</Carousel>
 					<Button Grid.Column="0" Grid.Row="1" Content="Назад" Click="Button_Click_BackFromInstructionMenu" FontSize="{Binding InterfaceTextSize}" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="0,0,0,0"/>
 					
-					<Button Classes="ButtTransparent" Background="White" BorderThickness="3" Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="1" SizeChanged="TextBlock_SizeChanged_ChangeTextBlockWidth" VerticalAlignment="Bottom" HorizontalAlignment="Stretch" Margin="0,0,40,55" IsHitTestVisible="False">
+					<Button Classes="ButtTransparent" Background="{DynamicResource BackgroundBrush}" BorderThickness="3" Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="1" SizeChanged="TextBlock_SizeChanged_ChangeTextBlockWidth" VerticalAlignment="Bottom" HorizontalAlignment="Stretch" Margin="5,0,60,55" IsHitTestVisible="False">
 						<StackPanel VerticalAlignment="Bottom" Margin="3" Orientation="Horizontal" HorizontalAlignment="Stretch">
 							<Image x:Name="TeachersImage" Source="/Assets/teacher.png" Width="170"/>
 							<Carousel x:Name="InstructionText" FontSize="{Binding InterfaceTextSize}" IsVisible="True" Margin="10,0,0,0" HorizontalAlignment="Center" ItemsSource="{Binding TextBlockInstruction}">
@@ -116,8 +116,8 @@
 						<TextBlock Classes="ThemeTB" Text="Настройки" HorizontalAlignment="Center" Margin="30" FontSize="{Binding InterfaceTitleSize}"/>
 						<WrapPanel HorizontalAlignment="Center">
 							<TextBlock Text="Размер шрифта: " TextWrapping="Wrap" FontSize="{Binding InterfaceTextSize}" VerticalAlignment="Center"/>
-							<Slider x:Name="TextSize" Minimum="15" Maximum="60" Width="100" Value="{Binding InterfaceTextSize}" VerticalAlignment="Center"/>
-							<TextBlock Text="{Binding InterfaceTextSize}" FontSize="{Binding InterfaceTextSize}" VerticalAlignment="Center"/>
+							<Slider x:Name="TextSize" Minimum="15" Maximum="60" Width="100" Value="{Binding InterfaceTextSizeChanging}" VerticalAlignment="Center"/>
+							<TextBlock Text="{Binding InterfaceTextSizeChanging}" FontSize="{Binding InterfaceTextSize}" VerticalAlignment="Center"/>
 						</WrapPanel>
 						<WrapPanel HorizontalAlignment="Center">
 							<TextBlock  VerticalAlignment="Center" Text="Звук: " TextWrapping="Wrap" FontSize="{Binding InterfaceTextSize}"/>
@@ -129,17 +129,22 @@
 							<Slider x:Name="MusicSize" Minimum="0" Maximum="10" Width="100" Value="{Binding MusicSize}" VerticalAlignment="Center"/>
 							<TextBlock Text="{Binding MusicSize}" FontSize="{Binding InterfaceTextSize}" VerticalAlignment="Center"/>
 						</WrapPanel>
+						<WrapPanel HorizontalAlignment="Center">
+							<RadioButton Content="Light" FontSize="{Binding InterfaceTextSize}" IsChecked="{Binding LightTheme}" Margin="5,0,5,0" />
+							<RadioButton Content="Dark" FontSize="{Binding InterfaceTextSize}" IsChecked="{Binding DarkTheme}" Margin="5,0,5,0"/>
+							<RadioButton Content="Default" FontSize="{Binding InterfaceTextSize}" IsChecked="{Binding DefaultTheme}" Margin="5,0,5,0"/>
+						</WrapPanel>
 						<WrapPanel  HorizontalAlignment="Center" Margin="0,0,0,0" Orientation="Horizontal">
-							<Button x:Name="AcceptButton" HorizontalAlignment="Center" Margin="10,10,10,10" FontSize="{Binding InterfaceTextSize}" Click="Button_Click_Settings">
+							<Button x:Name="AcceptButton" HorizontalAlignment="Center" Margin="10,10,10,10" FontSize="{Binding InterfaceTextSize}" Click="Button_Click_Settings" Command="{Binding SetSettings}">
 								<Button.Content>
 									<TextBlock Text="Применить" TextWrapping="Wrap" TextAlignment="Center"/>
 								</Button.Content>
 							</Button>
-							<Button x:Name="ByDefaultButton" SizeChanged="Button_SizeChanged" Content="По умолчанию" HorizontalAlignment="Center" Margin="10,10,10,10" FontSize="{Binding InterfaceTextSize}" Click="Button_Click_Settings"/>
+							<Button x:Name="ByDefaultButton" SizeChanged="Button_SizeChanged" Content="По умолчанию" HorizontalAlignment="Center" Margin="10,10,10,10" FontSize="{Binding InterfaceTextSize}" Click="Button_Click_Settings" Command="{Binding SetDefaultValuesForSettings}"/>
 							
 						</WrapPanel>
 					</StackPanel>
-					<Button  Content="{Binding Back}" HorizontalAlignment="Center" Margin="0,20,0,0" DockPanel.Dock="Bottom" VerticalAlignment="Bottom" FontSize="{Binding InterfaceTextSize}" Click="Button_Click_Settings"/>
+					<Button  Content="{Binding Back}" HorizontalAlignment="Center" Margin="0,20,0,0" DockPanel.Dock="Bottom" VerticalAlignment="Bottom" FontSize="{Binding InterfaceTextSize}" Click="Button_Click_Settings" Command="{Binding UpdateVisualValue}"/>
 				</DockPanel>
 
 		<Grid x:Name="EndGameStatistics" IsVisible="False" IsEnabled="False">
@@ -187,7 +192,7 @@
 				</Button>
 
 				
-				<TextBlock Text="{Binding TimerString}" HorizontalAlignment="Center" Margin="10,10,0,0" FontSize="{Binding InterfaceTextSize}"/>
+				<TextBlock Text="{Binding TimerString}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10,10,0,0" FontSize="{Binding InterfaceTextSize}"/>
 
 				<ListBox Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="2" Grid.RowSpan="2" ItemsSource="{Binding AnswerEquasion}" Margin="0,0,0,0" IsHitTestVisible="True" VerticalAlignment="Center" HorizontalAlignment="Center" CornerRadius="5" FontSize="{Binding InterfaceTextSize}">
 					<ItemsControl.ItemsPanel>

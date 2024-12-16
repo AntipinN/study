@@ -9,6 +9,7 @@
 			
 		</ResourceDictionary>
 		<ResourceDictionary x:Key="Light">
+			<SolidColorBrush x:Key="BackgroundBrush" Color="White"/>
 			<!--Фиолетовый-->
 			<SolidColorBrush x:Key="PressedBackgroundBrush" Color="#ff8961cc" />
 			<SolidColorBrush x:Key="PointOverButtonBackground" Color="#b59cdf" />
@@ -19,6 +20,7 @@
 			<SolidColorBrush x:Key="ButtonBorderBrush" Color="#ff8961cc" />
 		</ResourceDictionary>	
 		<ResourceDictionary x:Key="Dark">
+			<SolidColorBrush x:Key="BackgroundBrush" Color="#FF64576B"/>
 			<SolidColorBrush x:Key="PressedBackgroundBrush" Color="#ff494B6B" />
 			<SolidColorBrush x:Key="PointOverButtonBackground" Color="#1c1c1e" />
 			<SolidColorBrush x:Key="ButtonBorderBrush" Color="#584d5e" />

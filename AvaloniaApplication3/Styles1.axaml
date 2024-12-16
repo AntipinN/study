@@ -9,7 +9,7 @@
 		<Border Padding="20">
 			<!-- Add Controls for Previewer Here -->
 			<StackPanel>
-				<Button Classes ="ButtTransparent" Content="RataMahata"/>
+				<Button Classes ="GameButtons" Content="RataMahata"/>
 				<TextBlock Text="Alalalalala"/>
 			</StackPanel>
 
@@ -76,7 +76,7 @@
 
 	<Style Selector="Button.GameButtons">
 		<Setter Property="HorizontalContentAlignment" Value="Center"/>
-		<Setter Property="Background" Value="White"/>
+		<Setter Property="Background" Value="{DynamicResource BackgroundBrush}"/>
 		<Style Selector="^:selected /template/ ContentPresenter#PART_ContentPresenter">
 			<Setter Property="Background" Value="{Binding $parent[Button].Background}"/>
 		</Style>
@@ -96,9 +96,10 @@
 
 	<Style Selector="TextBlock.GameTextBlock">
 		<Setter Property="TextAlignment" Value="Center"/>
-		<Setter Property="MaxHeight" Value="{Binding InterfaceTextSize}"/>
+		<Setter Property="MaxHeight" Value="{Binding InterfaceTitleSize}"/>
 	</Style>
 	<Style Selector="TextBlock.InstructionTB">
+		<Setter Property="Background" Value="{DynamicResource BackgroundBrush}"/>
 		<Setter Property="FontSize" Value="{Binding InterfaceTextSize}"/>
 		<Setter Property="TextWrapping" Value="Wrap"/>
 		<Setter Property="HorizontalAlignment" Value="Left"/>

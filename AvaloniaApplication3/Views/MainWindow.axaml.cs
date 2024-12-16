@@ -1,16 +1,9 @@
 using Avalonia.Controls;
-using Avalonia.Controls.Primitives;
-using Avalonia.Data;
-using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.VisualTree;
-using AvaloniaApplication3;
-using AvaloniaApplication3.ViewModels;
 using System;
-using System.ComponentModel;
 using System.Linq;
-using System.Security.Cryptography;
-using Tmds.DBus.Protocol;
+
 
 namespace AvaloniaApplication3.Views
 {
@@ -63,6 +56,9 @@ namespace AvaloniaApplication3.Views
         {
             InstructionMenu.IsVisible = false;
             MainMenu.IsVisible = true;
+            InstructionView.SelectedIndex = 0;
+            InstructionText.SelectedIndex = 0; 
+            FocusManager?.ClearFocus();
         }
 
         private void Button_Click_Settings(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
@@ -71,6 +67,8 @@ namespace AvaloniaApplication3.Views
             {
                 case "Применить":
                     {
+                        //App.RequestedThemeVariantProperty = Avalonia.Styling.ThemeVariant.Dark;
+
                         break;
                     }
                 case "По умолчанию":
@@ -223,7 +221,7 @@ namespace AvaloniaApplication3.Views
             //(sender as TextBlock).MinWidth = ((((((((sender as TextBlock).Parent as Carousel).Parent as StackPanel).Parent as Button).Parent as Grid).Parent as Panel).Parent as Grid).Parent as Window).Width - 300 - 20;
             foreach(TextBlock tb in InstructionText.Items)
             {
-                tb.Width = TheWindow.Width - TeachersImage.Width - 205;
+                tb.Width = TheWindow.Width - TeachersImage.Width - 203 - tb.FontSize*2;
             }
             
         }
