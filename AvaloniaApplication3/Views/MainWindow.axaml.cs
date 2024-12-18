@@ -20,7 +20,7 @@ namespace AvaloniaApplication3.Views
         {
             switch ((sender as Button).Content.ToString())
             {
-                case "Играть":
+                case "Тренироваться":
                     {
                         MainMenu.IsVisible = false;
                         MainMenu.IsEnabled = false;

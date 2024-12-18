@@ -36,7 +36,7 @@
 		
 		<StackPanel x:Name="MainMenu" Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" IsVisible="True" IsEnabled="True">
 			<TextBlock Classes="ThemeTB" Text="Великий тренер дробей!" FontSize="{Binding InterfaceTitleSize}"/>
-			<Button  Classes="b1" Content="Играть" FontSize="{Binding InterfaceTextSize}" Click="Button_Click_MainMenu"/>
+			<Button  Classes="b1" Content="Тренироваться" FontSize="{Binding InterfaceTextSize}" Click="Button_Click_MainMenu"/>
 			<Button  Classes="b1" Content="Теория" FontSize="{Binding InterfaceTextSize}" Click="Button_Click_MainMenu" Command="{Binding GetInstructionCommand}"/>
 			<Button  Classes="b1" Content="Настройки" FontSize="{Binding InterfaceTextSize}" Click="Button_Click_MainMenu"/>
 			<Button  Classes="b1" Content="Выйти" FontSize="{Binding InterfaceTextSize}" Click="Button_Click_MainMenu"/>
@@ -45,7 +45,7 @@
 		<Panel x:Name= "InstructionMenu" IsVisible="False" Margin="20">
 				<Button Background="{DynamicResource BackgroundBrush}" Click="Previous" FontSize="{Binding InterfaceTextSize}">&lt;</Button>
 				<Button Background="{DynamicResource BackgroundBrush}" Click="Next" HorizontalAlignment="Right" FontSize="{Binding InterfaceTextSize}">&gt;</Button>
-				<Grid HorizontalAlignment="Stretch" VerticalAlignment="" Width="" ShowGridLines="False">
+				<Grid HorizontalAlignment="Stretch" Width="" ShowGridLines="False">
 					<Grid.ColumnDefinitions>
 						<ColumnDefinition Width="auto"/>
 						<ColumnDefinition Width="*"/>
@@ -116,7 +116,7 @@
 						<TextBlock Classes="ThemeTB" Text="Настройки" HorizontalAlignment="Center" Margin="30" FontSize="{Binding InterfaceTitleSize}"/>
 						<WrapPanel HorizontalAlignment="Center">
 							<TextBlock Text="Размер шрифта: " TextWrapping="Wrap" FontSize="{Binding InterfaceTextSize}" VerticalAlignment="Center"/>
-							<Slider x:Name="TextSize" Minimum="15" Maximum="60" Width="100" Value="{Binding InterfaceTextSizeChanging}" VerticalAlignment="Center"/>
+							<Slider x:Name="TextSize" Minimum="15" Maximum="56" Width="100" Value="{Binding InterfaceTextSizeChanging}" VerticalAlignment="Center"/>
 							<TextBlock Text="{Binding InterfaceTextSizeChanging}" FontSize="{Binding InterfaceTextSize}" VerticalAlignment="Center"/>
 						</WrapPanel>
 						<WrapPanel HorizontalAlignment="Center">
@@ -190,7 +190,7 @@
 						<TextBlock Text="Завершить" TextWrapping="Wrap" FontSize="{Binding InterfaceTextSize}"/>
 					</Button.Content>
 				</Button>
-
+				<TextBlock Text="{Binding ErrorMessage}" IsVisible="{Binding IsEqusaisonIncorrect}" Foreground="Red" TextWrapping="Wrap" Grid.Column="1" Grid.Row="0" Grid.ColumnSpan="2" FontSize="{Binding InterfaceTextSize}" VerticalAlignment="Center" HorizontalAlignment="Center" TextAlignment="Center"/>
 				
 				<TextBlock Text="{Binding TimerString}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10,10,0,0" FontSize="{Binding InterfaceTextSize}"/>
 

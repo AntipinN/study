@@ -21,6 +21,7 @@ namespace AvaloniaApplication3.Models
             IEquasionGenerator _IGenerator;
             ISolver _ISolver;
             IOPZ _IOPZ;
+            Fraction currentAnswer;
             public GameGenerator(IEquasionGenerator gen, ISolver solv, IOPZ opz) 
             {
                 _IGenerator = gen;
@@ -34,6 +35,7 @@ namespace AvaloniaApplication3.Models
                 List<object> result = _IGenerator.GenerateEquasion();
                 
                 result.Add(_ISolver.Solve(_IOPZ.CalculateOPZ(result)));
+                currentAnswer = new Fraction(result[result.Count -1] as Fraction);
                 result.Insert(result.Count - 1, "=");
                 List<string> package = new List<string>();
                 foreach(object o in result)
@@ -42,21 +44,19 @@ namespace AvaloniaApplication3.Models
                 }
                 return package;
             }
-            public bool CheckEquasion(string Answer, string Origin)
+            public bool CheckEquasion(string Answer)
             {
                 if(Answer.Length == 0)
                 {
                     return false;
                 }
                 string[] first = Answer.Split('/');
-                string[] second = Origin.Split('/');
                 if (first.Length > 1 && first[0].Length > 0 && first[1].Length > 0)
                 {
                     try
                     {
                         Fraction Answ = new Fraction(long.Parse(first[0]), long.Parse(first[1]));
-                        Fraction Orig = new Fraction(long.Parse(second[0]), long.Parse(second[1]));
-                        if ((Answ - Orig).Numerator == 0)
+                        if ((Answ - currentAnswer).Numerator == 0)
                         {
                             return true;
                         }
@@ -67,14 +67,28 @@ namespace AvaloniaApplication3.Models
                     }
                     catch (Exception e) 
                     {
-                        string date = DateTime.Now.ToString();
-                        using (StreamWriter fs = new StreamWriter($"ErrorLogs/errorlog {date}.txt"))
+                        string day = DateTime.Now.DayOfYear.ToString();
+                        string tiks = DateTime.Now.Ticks.ToString();
+                        if (!Directory.Exists("ErrorFolder"))
+                        {
+                            Directory.CreateDirectory("ErrorFolder");
+                        }
+                        using (StreamWriter fs = new StreamWriter($"ErrorFolder/errorlog {day +" "+ tiks}.txt",false))
                         {
                             fs.Write(e.Message);
                         }
-                        using(FileStream fs = new FileStream($"ErrorLogs/errorlog {date}.json", FileMode.OpenOrCreate))
+                        using(FileStream fs = new FileStream($"ErrorFolder/errorlog {day + " " + tiks}.json", FileMode.OpenOrCreate))
                         {
-                            JsonSerializer.Serialize(fs, e);
+                            List<string> list = new List<string>()
+                            {
+                                e.Message,
+                                e.StackTrace,
+                                e.InnerException?.ToString(),
+                                e.Source,
+                                e.TargetSite?.ToString(),
+                                e.HResult.ToString()
+                            };
+                            JsonSerializer.Serialize(fs, list);
                         }
                     }
                     return false;
@@ -84,7 +98,6 @@ namespace AvaloniaApplication3.Models
                     return false;
                 }
             }
-            
         }
 
         public static List<object> Generator_Equasion_Sum_Multiplication(int Lower, int Top, string sign, int MaxNumer, int MaxDenom) //метод позволяющий по введённым параметрам сгенерировать дроби для равенства(для + и умножения)

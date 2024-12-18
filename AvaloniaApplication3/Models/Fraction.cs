@@ -13,6 +13,13 @@ namespace AvaloniaApplication3.Models
                    else denominator = value;
                 }
         }
+
+        public Fraction(Fraction f) 
+        {
+            Numerator = f.Numerator;
+            Denominator = f.Denominator;
+        }
+
         public Fraction(long numerator, long denominator)
         {
             Numerator = numerator;

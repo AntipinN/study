@@ -19,6 +19,12 @@ using Avalonia;
 using System.IO;
 using System.Text.Json;
 using Avalonia.Styling;
+using Avalonia.Controls.Shapes;
+using System.Xml.Serialization;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.Text.Json.Serialization;
+using Avalonia.Media.Imaging;
+using Avalonia.Platform;
 
 namespace AvaloniaApplication3.ViewModels
 {
@@ -60,6 +66,11 @@ namespace AvaloniaApplication3.ViewModels
 
 #pragma warning disable CA1822 // Mark members as static
 
+
+        #region
+
+       
+        #endregion
 
         #region Settings
         [ObservableProperty]
@@ -198,6 +209,8 @@ namespace AvaloniaApplication3.ViewModels
         [ObservableProperty]
         private List<WrapPanel> viewBlockInstruction = new List<WrapPanel>();
 
+        
+
         void GetInstructionFromData()
         {
             if (InstructionText is null)
@@ -218,39 +231,48 @@ namespace AvaloniaApplication3.ViewModels
                     foreach(string w in InstructionText.view[i])
                     {
                         Button button;
-                        
-                        
-                        Regex regex = new Regex(@"(\(?[a-zA-Z0-9]+((∗|\+|\-)?[a-zA-Z0-9]+)*\)?/\(?[a-zA-Z0-9]+((∗|\+|\-)?[a-zA-Z0-9]+)*\)?)|([0-9]+/[0-9]+)|([<]*[=]+[>]*|([0-9]+))|([;])|([a-zA-Z]/[a-zA-Z])");
-                        if (w.Length > 0)
+                        if (w.Contains("avares"))
                         {
-                            bool entered = false;
-                            foreach (Match contentElement in regex.Matches(w))
+                            Bitmap bit = new Bitmap(AssetLoader.Open(new System.Uri(w)));
+                            Image image = new Image() { Source = bit, Height = 300 };
+                            s.Children.Add(image);
+                        }
+                        else
+                        {
+
+                      
+                        Regex regex = new Regex(@"(\(?[a-zA-Z0-9]+((∗|\+|\-)?[a-zA-Z0-9]+)*\)?/\(?[a-zA-Z0-9]+((∗|\+|\-)?[a-zA-Z0-9]+)*\)?)|([0-9]+/[0-9]+)|([<]*[=]+[>]*|([0-9]+))|([;])|([a-zA-Z]/[a-zA-Z])");
+                            if (w.Length > 0)
                             {
-                                Thickness margin = new Thickness(1,0,1,0);
-                                button = new Button() { Classes = { "GameButtons" }, Margin = margin };
-                                StackPanel sp = new StackPanel();
-                                if (contentElement.ToString().Contains('/'))
+                                bool entered = false;
+                                foreach (Match contentElement in regex.Matches(w))
                                 {
-                                    string[] wm = contentElement.ToString().Split(new char[] { '/', '(', ')' }, StringSplitOptions.RemoveEmptyEntries);
-                                    string middle = string.Concat(Enumerable.Repeat("―", Math.Max(wm[0].Length, wm[1].Length)));
-                                    sp.Children.Add(new TextBlock() { Text = wm[0], Classes = { "GameTextBlock" } });
-                                    sp.Children.Add(new TextBlock() { Text = middle, Height = 10, TextAlignment = TextAlignment.Center, VerticalAlignment = Avalonia.Layout.VerticalAlignment.Center });
-                                    sp.Children.Add(new TextBlock() { Text = wm[1], Classes = { "GameTextBlock" } });
-                                    button.Content = sp;
+                                    Thickness margin = new Thickness(1, 0, 1, 0);
+                                    button = new Button() { Classes = { "GameButtons" }, Margin = margin };
+                                    StackPanel sp = new StackPanel();
+                                    if (contentElement.ToString().Contains('/'))
+                                    {
+                                        string[] wm = contentElement.ToString().Split(new char[] { '/', '(', ')' }, StringSplitOptions.RemoveEmptyEntries);
+                                        string middle = string.Concat(Enumerable.Repeat("―", Math.Max(wm[0].Length, wm[1].Length)));
+                                        sp.Children.Add(new TextBlock() { Text = wm[0], Classes = { "GameTextBlock" } });
+                                        sp.Children.Add(new TextBlock() { Text = middle, Height = 10, TextAlignment = TextAlignment.Center, VerticalAlignment = Avalonia.Layout.VerticalAlignment.Center });
+                                        sp.Children.Add(new TextBlock() { Text = wm[1], Classes = { "GameTextBlock" } });
+                                        button.Content = sp;
+                                    }
+                                    else
+                                    {
+                                        button.Content = new TextBlock() { Text = contentElement.ToString(), Classes = { "GameTextBlock" }, VerticalAlignment = VerticalAlignment.Center };
+                                    }
+                                    s.Children.Add(button);
+                                    entered = true;
                                 }
-                                else
+                                if (!entered)
                                 {
-                                    button.Content = new TextBlock() { Text = contentElement.ToString(), Classes = { "GameTextBlock" }, VerticalAlignment = VerticalAlignment.Center };
+                                    button = new Button() { Classes = { "GameButtons" } };
+                                    button.Content = new TextBlock() { Text = new string(w), Classes = { "GameTextBlock" }, VerticalAlignment = VerticalAlignment.Center };
+                                    s.Children.Add(button);
+
                                 }
-                                s.Children.Add(button);
-                                entered = true;
-                            }
-                           if(!entered)
-                            {
-                                button = new Button() { Classes = { "GameButtons" } };
-                                button.Content = new TextBlock() { Text = new string(w), Classes = { "GameTextBlock" }, VerticalAlignment = VerticalAlignment.Center };
-                                s.Children.Add(button);
-                                
                             }
                         }
                     }
@@ -281,6 +303,7 @@ namespace AvaloniaApplication3.ViewModels
         [ObservableProperty]
         bool generateEquasionIsActivePicture = false;
 
+
         GameGenerator EasySumGame = new GameGenerator(new EasyDifficultyEquasionSum(), new FractionEquasionSolver(), new UniversalOPZFormer());
         GameGenerator EasySubtractGame = new GameGenerator(new EasyDifficultyEquasionSubtraction(), new FractionEquasionSolver(), new UniversalOPZFormer());
         GameGenerator EasyMultiplyGame = new GameGenerator(new EasyDifficultyEquasionMultiply(), new FractionEquasionSolver(), new UniversalOPZFormer());
@@ -300,6 +323,12 @@ namespace AvaloniaApplication3.ViewModels
 
         private DispatcherTimer _timer = new DispatcherTimer();
         Stopwatch stopwatchGame = new Stopwatch();
+
+
+        TextBox Numerator;
+        TextBox Denominator;
+        [ObservableProperty]
+        string errorMessage = "";
         #endregion
 
         #region Commands Region
@@ -671,15 +700,20 @@ namespace AvaloniaApplication3.ViewModels
             }
             else
             {
-                TextBox tb = new TextBox() {Text = "", TextAlignment = TextAlignment.Justify, HorizontalContentAlignment = Avalonia.Layout.HorizontalAlignment.Center};
+                TextBox tb = new TextBox() {Text = "", TextAlignment = TextAlignment.Justify, HorizontalContentAlignment = Avalonia.Layout.HorizontalAlignment.Center, MaxLength = 14};
                 tb.TextChanging += TextChanged; //Костыль для корректного отображения горизонтального выравнивания
                 tb.KeyDown += TextFilter; //Фильтрация всех символов кроме цифр и обработка клавиши Enter
                 st.Children.Add(tb);
-                st.Children.Add(new TextBlock() { Text = middle, Height = 10, TextAlignment = TextAlignment.Center, VerticalAlignment = Avalonia.Layout.VerticalAlignment.Center });
-                tb = new TextBox() { Text = "", TextAlignment = TextAlignment.Justify, HorizontalContentAlignment = Avalonia.Layout.HorizontalAlignment.Center };
+                
+                Numerator = tb; //сохраняем TextBox числителя для отслеживания
+
+                st.Children.Add(new TextBlock() { Text = middle, Height = 10, TextAlignment = TextAlignment.Center, VerticalAlignment = Avalonia.Layout.VerticalAlignment.Center, });
+                tb = new TextBox() { Text = "", TextAlignment = TextAlignment.Justify, HorizontalContentAlignment = Avalonia.Layout.HorizontalAlignment.Center, MaxLength = 14 };
                 tb.TextChanging += TextChanged; //Костыль для корректного отображения горизонтального выравнивания
                 tb.KeyDown += TextFilter; //Фильтрация всех символов кроме цифр и обработка клавиши Enter
                 st.Children.Add(tb);
+                
+                Denominator = tb; //Сохраняем TextBox знаменателя для отслеживания
             }
             //st.Children.Add(new TextBlock() { Text = middle, Height = 10, TextAlignment = TextAlignment.Center, VerticalAlignment = Avalonia.Layout.VerticalAlignment.Center });
             //st.Children.Add(new TextBlock() { Text = list[1], Classes = { "GameTextBlock" } });
@@ -699,7 +733,7 @@ namespace AvaloniaApplication3.ViewModels
         {
             Regex reg = new Regex(@"\D");
             string s = e.KeySymbol;
-            if(e.PhysicalKey == PhysicalKey.Enter)
+            if(e.PhysicalKey == PhysicalKey.Enter || e.PhysicalKey == PhysicalKey.NumPadEnter)
             {
                 VerifyAnswerCommand.Execute(sender);
             } 
@@ -712,42 +746,70 @@ namespace AvaloniaApplication3.ViewModels
         public void VerifyAnswer()
         {
             IsEqusaisonIncorrect = false;
-            for (int i = 0; i < AnswerEquasion.Count; i++)
-            {
-                if((AnswerEquasion[i] is Button) && (AnswerEquasion[i] as Button).Content is StackPanel)
-                {
-                    StackPanel st = ((AnswerEquasion[i] as Button).Content as StackPanel);
+            //for (int i = 0; i < AnswerEquasion.Count; i++)
+            //{
+            //    if((AnswerEquasion[i] is Button) && (AnswerEquasion[i] as Button).Content is StackPanel)
+            //    {
+            //        StackPanel st = ((AnswerEquasion[i] as Button).Content as StackPanel);
 
-                    for (int j = 0; j < st.Children.Count; j++)
-                    {
-                        if (st.Children[j] is TextBox)
-                        {
-                            if (j < st.Children.Count - 1)
-                            {
-                                string Answer = (st.Children[j] as TextBox).Text + "/";
-                                if (st.Children[j + 2] is TextBlock)
-                                {
-                                    Answer += (st.Children[j + 2] as TextBlock).Text;
-                                }
-                                else
-                                {
-                                    Answer += (st.Children[j + 2] as TextBox).Text;
-                                }
-                                string Origin = ((((Equasion[i] as Button).Content as StackPanel).Children[j]) as TextBlock).Text + "/" + ((((Equasion[i] as Button).Content as StackPanel).Children[j + 2]) as TextBlock).Text;
-                                if (!CurrentGame.CheckEquasion(Answer, Origin))
-                                {
-                                    IsEqusaisonIncorrect = true;
-                                    GenerateEquasionIsActive = false;
-                                    return;
-                                }
-                                //if ((st.Children[j] as TextBox).Text != ((((Equasion[i]as Button).Content as StackPanel).Children[j]) as TextBlock).Text)
-                                //{
-                                //    
-                                //}
-                            }
-                        }
-                    }
+            //        for (int j = 0; j < st.Children.Count; j++)
+            //        {
+            //            if (st.Children[j] is TextBox)
+            //            {
+            //                if (j < st.Children.Count - 1)
+            //                {
+            //                    string Answer = (st.Children[j] as TextBox).Text + "/";
+            //                    if (st.Children[j + 2] is TextBlock)
+            //                    {
+            //                        Answer += (st.Children[j + 2] as TextBlock).Text;
+            //                    }
+            //                    else
+            //                    {
+            //                        Answer += (st.Children[j + 2] as TextBox).Text;
+            //                    }
+            //                    string Origin = ((((Equasion[i] as Button).Content as StackPanel).Children[j]) as TextBlock).Text + "/" + ((((Equasion[i] as Button).Content as StackPanel).Children[j + 2]) as TextBlock).Text;
+            //                    if (!CurrentGame.CheckEquasion(Answer, Origin))
+            //                    {
+            //                        IsEqusaisonIncorrect = true;
+            //                        GenerateEquasionIsActive = false;
+            //                        return;
+            //                    }
+            //                    //if ((st.Children[j] as TextBox).Text != ((((Equasion[i]as Button).Content as StackPanel).Children[j]) as TextBlock).Text)
+            //                    //{
+            //                    //    
+            //                    //}
+            //                }
+            //            }
+            //        }
+            //    }
+            //}
+            Regex checkForCorrectLine = new Regex(@"[1-9]+[0-9]");
+            Match denominatorCorrect = checkForCorrectLine.Match(Denominator.Text);
+            ErrorMessage = "";
+            if (Numerator is not null && Numerator.Text is not null && Numerator.Text.Length > 1 && Numerator.Text[0] == '0')
+            {
+                ErrorMessage += "Числитель не может начинаться с нуля!";
+            }
+            if(denominatorCorrect.Length < Denominator.Text.Length)
+            {
+                if(errorMessage.Length > 0)
+                {
+                    ErrorMessage += '\n';
                 }
+                ErrorMessage += "Знаменатель не может быть нулём или начинаться с него!";
+            }
+            if(ErrorMessage.Length > 0)
+            {
+                IsEqusaisonIncorrect = true;
+                GenerateEquasionIsActive = false;
+                return;
+            }
+            string Answer = Numerator.Text + "/" + Denominator.Text;
+            if (!CurrentGame.CheckEquasion(Answer))
+            {
+                IsEqusaisonIncorrect = true;
+                GenerateEquasionIsActive = false;
+                return;
             }
             GenerateEquasionIsActive = true;
             if (stopwatchGame.IsRunning)

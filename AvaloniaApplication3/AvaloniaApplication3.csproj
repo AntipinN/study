@@ -5,7 +5,7 @@
     <Nullable>enable</Nullable>
     <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
     <ApplicationManifest>app.manifest</ApplicationManifest>
-    <SignAssembly>True</SignAssembly>
+    <SignAssembly>False</SignAssembly>
     <AssemblyOriginatorKeyFile>C:\Users\Betrikkolo\source\ivDri.snk</AssemblyOriginatorKeyFile>
     <PublishAot>False</PublishAot>
     <RootNamespace></RootNamespace>
@@ -20,8 +20,9 @@
   <PropertyGroup Label="Avalonia">
     <AvaloniaXamlVerboseExceptions>False</AvaloniaXamlVerboseExceptions>
     <ApplicationIcon>Assets\AB Icon ComSans2.ico</ApplicationIcon>
-    <AssemblyVersion>0.1.0.0</AssemblyVersion>
-    <FileVersion>0.1.0.0</FileVersion>
+    <AssemblyVersion>0.1.0.1</AssemblyVersion>
+    <FileVersion>0.1.0.1</FileVersion>
+    <DelaySign>False</DelaySign>
   </PropertyGroup>
 
   <ItemGroup>
@@ -31,6 +32,22 @@
 
   <ItemGroup>
     <AvaloniaResource Include="Assets\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <AvaloniaResource Remove="Assets\old\EightOfACircle.png" />
+    <AvaloniaResource Remove="Assets\old\EightOfTwelve.png" />
+    <AvaloniaResource Remove="Assets\old\emptyOneOfThree.png" />
+    <AvaloniaResource Remove="Assets\old\FifthOfACircle.png" />
+    <AvaloniaResource Remove="Assets\old\FiveOfEight.png" />
+    <AvaloniaResource Remove="Assets\old\FourOfASix.png" />
+    <AvaloniaResource Remove="Assets\old\FourOfFive.png" />
+    <AvaloniaResource Remove="Assets\old\FourthCircle.png" />
+    <AvaloniaResource Remove="Assets\old\HalfCircle.png" />
+    <AvaloniaResource Remove="Assets\old\OneOfFour.png" />
+    <AvaloniaResource Remove="Assets\old\ThreeCircle.png" />
+    <AvaloniaResource Remove="Assets\old\TvelveCircle.png" />
+    <AvaloniaResource Remove="Assets\old\TwoOfAThree.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -77,5 +94,9 @@
     <Content Include="AllRes\JSON_Instruction.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Assets\old\" />
   </ItemGroup>
 </Project>
