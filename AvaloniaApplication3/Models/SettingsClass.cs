@@ -8,16 +8,18 @@ namespace AvaloniaApplication3.Models
     {
         public int InterfaceTextSize { get; set; }
         public ThemeVariant Theme { get; set; }
-
-        public SettingsClass(int size, ThemeVariant tw) 
+        public int ImageSize { get; set; }
+        public SettingsClass(int size, ThemeVariant tw, int imageSize) 
         {
             InterfaceTextSize = size;
             Theme = tw;
+            ImageSize = imageSize;
         }
         public SettingsClass()
         {
             Theme = Avalonia.Styling.ThemeVariant.Default;
             InterfaceTextSize = 26;
+            ImageSize = 200;
         }
         
     }

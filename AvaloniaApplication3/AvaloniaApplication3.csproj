@@ -61,7 +61,14 @@
     <None Remove="Assets\AB Icon.png" />
     <None Remove="Assets\AB Icon400.png" />
     <None Remove="Assets\AB Icon64 comicSansB.png" />
+    <None Remove="Assets\AppleTransparent.png" />
+    <None Remove="Assets\BoyOne.png" />
+    <None Remove="Assets\BoyThree.png" />
+    <None Remove="Assets\BoyTwo.png" />
     <None Remove="Assets\ContributorsLinks.txt" />
+    <None Remove="Assets\EightApples.png" />
+    <None Remove="Assets\SplittedApple.png" />
+    <None Remove="Assets\SplittedTwoOfThree.png" />
     <None Remove="Assets\дробь2 (2).png" />
     <None Remove="Assets\дробь3 (2).png" />
     <None Remove="Assets\дробь3 (3).png" />

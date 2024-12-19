@@ -3,6 +3,7 @@ using Avalonia.Interactivity;
 using Avalonia.VisualTree;
 using System;
 using System.Linq;
+using System.Threading;
 
 
 namespace AvaloniaApplication3.Views
@@ -18,6 +19,7 @@ namespace AvaloniaApplication3.Views
         }
         private void Button_Click_MainMenu(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
         {
+            FocusManager?.ClearFocus();
             switch ((sender as Button).Content.ToString())
             {
                 case "Тренироваться":
@@ -34,6 +36,7 @@ namespace AvaloniaApplication3.Views
                         InstructionText.SelectedIndex = 0;
                         InstructionView.SelectedIndex = 0;
                         InstructionMenu.IsVisible = true;
+                        InstructionMenu.Focus();
                         break;
                     }
                 case "Настройки":
@@ -50,7 +53,7 @@ namespace AvaloniaApplication3.Views
                         break;
                     }
             }
-            FocusManager?.ClearFocus();
+            
         }
 
         private void Button_Click_BackFromInstructionMenu(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
@@ -199,6 +202,7 @@ namespace AvaloniaApplication3.Views
 
         public void Previous(object sender, RoutedEventArgs args)
         {
+            
             if (InstructionText.SelectedIndex > 0)
             {
                 InstructionText.SelectedIndex--;
@@ -227,6 +231,20 @@ namespace AvaloniaApplication3.Views
             
         }
 
-
+        private void Panel_KeyDown(object? sender, Avalonia.Input.KeyEventArgs e)
+        {
+            if(e.Key == Avalonia.Input.Key.Left)
+            {
+                Previous(this, e);
+            }
+            else if(e.Key == Avalonia.Input.Key.Right)
+            {
+                Next(this, e);
+            }
+            else if(e.Key == Avalonia.Input.Key.Escape)
+            {
+                Button_Click_BackFromInstructionMenu(this, e);
+            }
+        }
     }
 }

@@ -39,14 +39,11 @@ namespace AvaloniaApplication3
                                                 CancellationToken cancellationToken)
         {
             
-            if (cancellationToken.IsCancellationRequested)
-            {
-                return;
-            }
-            from.IsVisible = true;
-            var tasks = new List<Task>();
-            var transparentProperty = LayoutTransformControl.OpacityProperty;
-            //Duration = new TimeSpan(10000000);
+                
+                var tasks = new List<Task>();
+                var transparentProperty = LayoutTransformControl.OpacityProperty;
+                //Duration = new TimeSpan(10000000);
+
             if (from != null)
             {
                 var animation = new Animation
@@ -76,13 +73,15 @@ namespace AvaloniaApplication3
                     Duration = Duration
                 };
                 tasks.Add(animation.RunAsync(from, cancellationToken));
+                from.IsVisible = false;
             }
             
+
             if (to != null)
             {
 
                 to.IsVisible = true;
-                
+
                 var animation = new Animation
                 {
                     FillMode = FillMode.Forward,
@@ -112,15 +111,6 @@ namespace AvaloniaApplication3
                     Duration = Duration
                 };
                 tasks.Add(animation.RunAsync(to, cancellationToken));
-            }
-
-            if (from != null && !cancellationToken.IsCancellationRequested)
-            {
-                from.IsVisible = false;
-            }
-            if (cancellationToken.IsCancellationRequested)
-            {
-                return;
             }
         }
 

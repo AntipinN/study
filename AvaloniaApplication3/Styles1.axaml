@@ -99,7 +99,7 @@
 		<Setter Property="MaxHeight" Value="{Binding InterfaceTitleSize}"/>
 	</Style>
 	<Style Selector="TextBlock.InstructionTB">
-		<Setter Property="Background" Value="{DynamicResource BackgroundBrush}"/>
+		<Setter Property="Background" Value="{DynamicResource BackgroundBrushTransparent}"/>
 		<Setter Property="FontSize" Value="{Binding InterfaceTextSize}"/>
 		<Setter Property="TextWrapping" Value="Wrap"/>
 		<Setter Property="HorizontalAlignment" Value="Left"/>

@@ -27,7 +27,6 @@ namespace AvaloniaApplication3.Models
                 _IGenerator = gen;
                 _ISolver = solv;
                 _IOPZ = opz;
-
             }
 
             public List<string> GetExpression()
@@ -67,29 +66,7 @@ namespace AvaloniaApplication3.Models
                     }
                     catch (Exception e) 
                     {
-                        string day = DateTime.Now.DayOfYear.ToString();
-                        string tiks = DateTime.Now.Ticks.ToString();
-                        if (!Directory.Exists("ErrorFolder"))
-                        {
-                            Directory.CreateDirectory("ErrorFolder");
-                        }
-                        using (StreamWriter fs = new StreamWriter($"ErrorFolder/errorlog {day +" "+ tiks}.txt",false))
-                        {
-                            fs.Write(e.Message);
-                        }
-                        using(FileStream fs = new FileStream($"ErrorFolder/errorlog {day + " " + tiks}.json", FileMode.OpenOrCreate))
-                        {
-                            List<string> list = new List<string>()
-                            {
-                                e.Message,
-                                e.StackTrace,
-                                e.InnerException?.ToString(),
-                                e.Source,
-                                e.TargetSite?.ToString(),
-                                e.HResult.ToString()
-                            };
-                            JsonSerializer.Serialize(fs, list);
-                        }
+                        ErrorHandlerSaverClass.HandleError(e);
                     }
                     return false;
                 }
@@ -162,20 +139,6 @@ namespace AvaloniaApplication3.Models
         {
             public List<object> GenerateEquasion()
             {
-
-                //Random rnd = new Random();
-
-                //List<object> equasion = new List<object>();
-
-                //int numerator = rnd.Next(1, MaxEasyNumerator);
-                //int denominator = rnd.Next(1 + numerator, numerator + PlusSubtractionCoefficientForDenominatorRange);
-                //equasion.Add(new Fraction(numerator, denominator));
-                //equasion.Add("-");
-
-                //numerator = rnd.Next(1, numerator);
-                //denominator = rnd.Next(denominator +1, denominator + PlusSubtractionCoefficientForDenominatorRange);
-                //equasion.Add(new Fraction(numerator, denominator));
-
                 return Generator_Equasion_Subtraction(2,2, MaxEasyNumerator, PlusSubtractionCoefficientForDenominatorRange);
             }
         }
@@ -184,19 +147,6 @@ namespace AvaloniaApplication3.Models
         {
             public List<object> GenerateEquasion()
             {
-
-                //Random rnd = new Random();
-
-                //List<object> equasion = new List<object>();
-                //for (int i = 0; i < 3; i++)
-                //{
-                //    int numerator = rnd.Next(1, MaxEasyNumerator);
-                //    int denominator = rnd.Next(1 + numerator, 1 + numerator * MultiplayerCoefficientForDenominatorRange);
-                //    equasion.Add(new Fraction(numerator, denominator));
-                //    equasion.Add("*");
-                //}
-                //equasion.RemoveAt(equasion.Count - 1);
-
                 return Generator_Equasion_Sum_Multiplication(2, 2, "*", MaxEasyNumerator, MultiplayerCoefficientForDenominatorRange); ;
             }
         }
@@ -206,18 +156,6 @@ namespace AvaloniaApplication3.Models
         {
             public List<object> GenerateEquasion()
             {
-                //Random rnd = new Random();
-
-                //List<object> equasion = new List<object>();
-                //for (int i = 0; i < rnd.Next(1, 3); i++)
-                //{
-                //    int numerator = rnd.Next(0, MaxMediumNumerator);
-                //    int denominator = rnd.Next(numerator, numerator * MultiplayerCoefficientForDenominatorRange);
-                //    equasion.Add(new Fraction(numerator, denominator));
-                //    equasion.Add("+");
-                //}
-                //equasion.RemoveAt(equasion.Count - 1);
-
                 return Generator_Equasion_Sum_Multiplication(2, 3, "+", MaxMediumNumerator, MultiplayerCoefficientForDenominatorRange);
             }
 
@@ -227,20 +165,6 @@ namespace AvaloniaApplication3.Models
         {
             public List<object> GenerateEquasion()
             {
-
-                //Random rnd = new Random();
-
-                //List<object> equasion = new List<object>();
-
-                //int numerator = rnd.Next(1, MaxEasyNumerator);
-                //int denominator = rnd.Next(1 + numerator, numerator + PlusSubtractionCoefficientForDenominatorRange);
-                //equasion.Add(new Fraction(numerator, denominator));
-                //equasion.Add("-");
-
-                //numerator = rnd.Next(1, numerator);
-                //denominator = rnd.Next(denominator + 1, denominator + PlusSubtractionCoefficientForDenominatorRange);
-                //equasion.Add(new Fraction(numerator, denominator));
-
                 return Generator_Equasion_Subtraction(2, 3, MaxMediumNumerator, PlusSubtractionCoefficientForDenominatorRange);
             }
         }
@@ -249,19 +173,6 @@ namespace AvaloniaApplication3.Models
         {
             public List<object> GenerateEquasion()
             {
-
-                //Random rnd = new Random();
-
-                //List<object> equasion = new List<object>();
-                //for (int i = 0; i < 3; i++)
-                //{
-                //    int numerator = rnd.Next(1, MaxEasyNumerator);
-                //    int denominator = rnd.Next(1 + numerator, 1 + numerator * MultiplayerCoefficientForDenominatorRange);
-                //    equasion.Add(new Fraction(numerator, denominator));
-                //    equasion.Add("*");
-                //}
-                //equasion.RemoveAt(equasion.Count - 1);
-
                 return Generator_Equasion_Sum_Multiplication(2, 3, "*", MaxMediumNumerator, MultiplayerCoefficientForDenominatorRange);
             }
         }
@@ -270,16 +181,6 @@ namespace AvaloniaApplication3.Models
         {
             public List<object> GenerateEquasion()
             {
-                //Random rnd = new Random();
-
-                //List<object> equasion = new List<object>();
-                //for (int i = 0; i < rnd.Next(2, 4); i++)
-                //{
-                //    int numerator = rnd.Next(0, MaxHardNumerator);
-                //    int denominator = rnd.Next(numerator, numerator * MultiplayerCoefficientForDenominatorRange);
-                //    equasion.Add(new Fraction(numerator, denominator));
-                //}
-
                 return Generator_Equasion_Sum_Multiplication(2, 4, "+", MaxHardNumerator, MultiplayerCoefficientForDenominatorRange);
             }
         }
@@ -288,19 +189,6 @@ namespace AvaloniaApplication3.Models
         {
             public List<object> GenerateEquasion()
             {
-
-                //Random rnd = new Random();
-
-                //List<object> equasion = new List<object>();
-                //for (int i = 0; i < 3; i++)
-                //{
-                //    int numerator = rnd.Next(1, MaxEasyNumerator);
-                //    int denominator = rnd.Next(1 + numerator, 1 + numerator * MultiplayerCoefficientForDenominatorRange);
-                //    equasion.Add(new Fraction(numerator, denominator));
-                //    equasion.Add("*");
-                //}
-                //equasion.RemoveAt(equasion.Count - 1);
-
                 return Generator_Equasion_Subtraction(2, 4, MaxHardNumerator, PlusSubtractionCoefficientForDenominatorRange);
             }
         }
@@ -309,16 +197,6 @@ namespace AvaloniaApplication3.Models
         {
             public List<object> GenerateEquasion()
             {
-                //Random rnd = new Random();
-
-                //List<object> equasion = new List<object>();
-                //for (int i = 0; i < rnd.Next(2, 4); i++)
-                //{
-                //    int numerator = rnd.Next(0, MaxHardNumerator);
-                //    int denominator = rnd.Next(numerator, numerator * MultiplayerCoefficientForDenominatorRange);
-                //    equasion.Add(new Fraction(numerator, denominator));
-                //}
-
                 return Generator_Equasion_Sum_Multiplication(2, 4, "*", MaxHardNumerator, MultiplayerCoefficientForDenominatorRange);
             }
         }

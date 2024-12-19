@@ -25,6 +25,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Text.Json.Serialization;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
+using Avalonia.Data;
 
 namespace AvaloniaApplication3.ViewModels
 {
@@ -32,7 +33,7 @@ namespace AvaloniaApplication3.ViewModels
     {
         public MainWindowViewModel()
         {
-            //SettingsSerializer();
+            SettingsSerializer();
             
             SettingsInit();
             GenerateTimer();
@@ -79,6 +80,7 @@ namespace AvaloniaApplication3.ViewModels
         {
             InterfaceTitleSize = value + 12;
             InterfaceTextSizeChanging = value;
+            InstructionImageSize = InstructionImageSize + value * 2;
         }
         [ObservableProperty]
         private int interfaceTitleSize = 26 + 12;
@@ -88,6 +90,14 @@ namespace AvaloniaApplication3.ViewModels
         private int musicSize = 5;
         [ObservableProperty]
         private int interfaceTextSizeChanging = 26;
+        [ObservableProperty]
+        private int instructionImageSize = 200;
+        [ObservableProperty]
+        private int publicInstrImageSize = 200;
+        partial void OnPublicInstrImageSizeChanging(int value)
+        {
+            InstructionImageSize = value + InterfaceTextSize * 2;
+        }
         void setSettings()
         {
             InterfaceTextSize = InterfaceTextSizeChanging;
@@ -149,13 +159,23 @@ namespace AvaloniaApplication3.ViewModels
         bool defaultTheme = true;
         void SettingsInit()
         {
-            SettingsClass settings;
-            using (FileStream fs = new FileStream("AllRes/Settings.json", FileMode.OpenOrCreate))
+            try
             {
-                settings = JsonSerializer.Deserialize<SettingsClass>(fs);
+
+                SettingsClass settings;
+                using (FileStream fs = new FileStream("AllRes/Settings.json", FileMode.Open))
+                {
+                    settings = JsonSerializer.Deserialize<SettingsClass>(fs);
+                }
+
+                InterfaceTextSize = settings.InterfaceTextSize;
+                PublicInstrImageSize = settings.ImageSize;
+            }
+            catch(Exception e)
+            {
+                ErrorHandlerSaverClass.HandleError(e);
             }
             
-            InterfaceTextSize = settings.InterfaceTextSize;
             //ThemeVary = settings.Theme;
             if (ThemeVary == ThemeVariant.Default)
             {
@@ -178,7 +198,7 @@ namespace AvaloniaApplication3.ViewModels
         }
         void SettingsSerializer()
         {
-            SettingsClass settings = new SettingsClass(InterfaceTextSize, ThemeVary);
+            SettingsClass settings = new SettingsClass(InterfaceTextSize, ThemeVary, PublicInstrImageSize);
             using (FileStream fs = new FileStream("AllRes/Settings.json", FileMode.Create))
             {
                 JsonSerializer.Serialize(fs, settings);
@@ -208,9 +228,6 @@ namespace AvaloniaApplication3.ViewModels
 
         [ObservableProperty]
         private List<WrapPanel> viewBlockInstruction = new List<WrapPanel>();
-
-        
-
         void GetInstructionFromData()
         {
             if (InstructionText is null)
@@ -218,11 +235,11 @@ namespace AvaloniaApplication3.ViewModels
                 InstructionText = new Text_for_presentation();
                 for (int i = 0; i < InstructionText.text.Count; i++)
                 {
+                    
                     TextBlock tb = new TextBlock()
                     {
                         Classes = { "InstructionTB" },
                         Text = InstructionText.text[i]
-                        
                     };
                     TextBlockInstruction.Add(tb);
 
@@ -234,14 +251,15 @@ namespace AvaloniaApplication3.ViewModels
                         if (w.Contains("avares"))
                         {
                             Bitmap bit = new Bitmap(AssetLoader.Open(new System.Uri(w)));
-                            Image image = new Image() { Source = bit, Height = 300 };
+                            Image image = new Image() { Source = bit, [!Image.HeightProperty] = new Binding("InstructionImageSize") };
+                            
                             s.Children.Add(image);
                         }
                         else
                         {
 
                       
-                        Regex regex = new Regex(@"(\(?[a-zA-Z0-9]+((∗|\+|\-)?[a-zA-Z0-9]+)*\)?/\(?[a-zA-Z0-9]+((∗|\+|\-)?[a-zA-Z0-9]+)*\)?)|([0-9]+/[0-9]+)|([<]*[=]+[>]*|([0-9]+))|([;])|([a-zA-Z]/[a-zA-Z])");
+                            Regex regex = new Regex(@"(\(?[a-zA-Z0-9]+((∗|\+|\-)?[a-zA-Z0-9]+)*\)?/\(?[a-zA-Z0-9]+((∗|\+|\-)?[a-zA-Z0-9]+)*\)?)|([0-9]+/[0-9]+)|([<]*[=]+[>]*|([0-9]+))|([;])|([a-zA-Z]/[a-zA-Z])|([\D]+/[\D]+)");
                             if (w.Length > 0)
                             {
                                 bool entered = false;
@@ -703,7 +721,9 @@ namespace AvaloniaApplication3.ViewModels
                 TextBox tb = new TextBox() {Text = "", TextAlignment = TextAlignment.Justify, HorizontalContentAlignment = Avalonia.Layout.HorizontalAlignment.Center, MaxLength = 14};
                 tb.TextChanging += TextChanged; //Костыль для корректного отображения горизонтального выравнивания
                 tb.KeyDown += TextFilter; //Фильтрация всех символов кроме цифр и обработка клавиши Enter
+                tb.PastingFromClipboard += PastingIntercept;
                 st.Children.Add(tb);
+
                 
                 Numerator = tb; //сохраняем TextBox числителя для отслеживания
 
@@ -711,14 +731,12 @@ namespace AvaloniaApplication3.ViewModels
                 tb = new TextBox() { Text = "", TextAlignment = TextAlignment.Justify, HorizontalContentAlignment = Avalonia.Layout.HorizontalAlignment.Center, MaxLength = 14 };
                 tb.TextChanging += TextChanged; //Костыль для корректного отображения горизонтального выравнивания
                 tb.KeyDown += TextFilter; //Фильтрация всех символов кроме цифр и обработка клавиши Enter
+                tb.PastingFromClipboard += PastingIntercept;
                 st.Children.Add(tb);
                 
                 Denominator = tb; //Сохраняем TextBox знаменателя для отслеживания
             }
-            //st.Children.Add(new TextBlock() { Text = middle, Height = 10, TextAlignment = TextAlignment.Center, VerticalAlignment = Avalonia.Layout.VerticalAlignment.Center });
-            //st.Children.Add(new TextBlock() { Text = list[1], Classes = { "GameTextBlock" } });
-            //tmpButton.Content = $"{list[0]}{middle}{list[1]}";
-
+            
             tmpButtonTwo.Content = st;
         }
         //Функция принудительного обновления отрисовки кнопок на ListBox.
@@ -741,49 +759,16 @@ namespace AvaloniaApplication3.ViewModels
             {
                 e.Handled = true;
             }
-
         }
+        void PastingIntercept(object sender, Avalonia.Interactivity.RoutedEventArgs e)
+        {
+            e.Handled = true;
+        } 
         public void VerifyAnswer()
         {
             IsEqusaisonIncorrect = false;
-            //for (int i = 0; i < AnswerEquasion.Count; i++)
-            //{
-            //    if((AnswerEquasion[i] is Button) && (AnswerEquasion[i] as Button).Content is StackPanel)
-            //    {
-            //        StackPanel st = ((AnswerEquasion[i] as Button).Content as StackPanel);
-
-            //        for (int j = 0; j < st.Children.Count; j++)
-            //        {
-            //            if (st.Children[j] is TextBox)
-            //            {
-            //                if (j < st.Children.Count - 1)
-            //                {
-            //                    string Answer = (st.Children[j] as TextBox).Text + "/";
-            //                    if (st.Children[j + 2] is TextBlock)
-            //                    {
-            //                        Answer += (st.Children[j + 2] as TextBlock).Text;
-            //                    }
-            //                    else
-            //                    {
-            //                        Answer += (st.Children[j + 2] as TextBox).Text;
-            //                    }
-            //                    string Origin = ((((Equasion[i] as Button).Content as StackPanel).Children[j]) as TextBlock).Text + "/" + ((((Equasion[i] as Button).Content as StackPanel).Children[j + 2]) as TextBlock).Text;
-            //                    if (!CurrentGame.CheckEquasion(Answer, Origin))
-            //                    {
-            //                        IsEqusaisonIncorrect = true;
-            //                        GenerateEquasionIsActive = false;
-            //                        return;
-            //                    }
-            //                    //if ((st.Children[j] as TextBox).Text != ((((Equasion[i]as Button).Content as StackPanel).Children[j]) as TextBlock).Text)
-            //                    //{
-            //                    //    
-            //                    //}
-            //                }
-            //            }
-            //        }
-            //    }
-            //}
-            Regex checkForCorrectLine = new Regex(@"[1-9]+[0-9]");
+            
+            Regex checkForCorrectLine = new Regex(@"[1-9]+[0-9]*");
             Match denominatorCorrect = checkForCorrectLine.Match(Denominator.Text);
             ErrorMessage = "";
             if (Numerator is not null && Numerator.Text is not null && Numerator.Text.Length > 1 && Numerator.Text[0] == '0')
