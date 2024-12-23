@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Security.Cryptography.X509Certificates;
+using System.Text;
 using System.Text.Json;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace AvaloniaApplication3.Models
 {
@@ -21,32 +24,26 @@ namespace AvaloniaApplication3.Models
             IEquasionGenerator _IGenerator;
             ISolver _ISolver;
             IOPZ _IOPZ;
-            Fraction currentAnswer;
+            Fraction Ansver_fraction;
             public GameGenerator(IEquasionGenerator gen, ISolver solv, IOPZ opz) 
             {
                 _IGenerator = gen;
                 _ISolver = solv;
                 _IOPZ = opz;
-
             }
 
-            public List<string> GetExpression()
+            public Wrapper_fractions GetExpression()
             {
-                List<object> result = _IGenerator.GenerateEquasion();
-                
-                result.Add(_ISolver.Solve(_IOPZ.CalculateOPZ(result)));
-                currentAnswer = new Fraction(result[result.Count -1] as Fraction);
-                result.Insert(result.Count - 1, "=");
-                List<string> package = new List<string>();
-                foreach(object o in result)
-                {
-                    package.Add(o.ToString());
-                }
-                return package;
+                Wrapper_fractions result = _IGenerator.GenerateEquasion();
+                Ansver_fraction = _ISolver.Solve(_IOPZ.CalculateOPZ(result.term), result.fraction_substitutions);
+                result.fraction_substitutions.Add("O1", Ansver_fraction);
+                result.term.Add("=");
+                result.term.Add("O1");
+                return result;
             }
             public bool CheckEquasion(string Answer)
             {
-                if(Answer.Length == 0)
+                if (Answer.Length == 0)
                 {
                     return false;
                 }
@@ -56,7 +53,7 @@ namespace AvaloniaApplication3.Models
                     try
                     {
                         Fraction Answ = new Fraction(long.Parse(first[0]), long.Parse(first[1]));
-                        if ((Answ - currentAnswer).Numerator == 0)
+                        if ((Answ - Ansver_fraction).Numerator == 0)
                         {
                             return true;
                         }
@@ -65,7 +62,7 @@ namespace AvaloniaApplication3.Models
                             return false;
                         }
                     }
-                    catch (Exception e) 
+                    catch (Exception e)
                     {
                         string day = DateTime.Now.DayOfYear.ToString();
                         string tiks = DateTime.Now.Ticks.ToString();
@@ -73,11 +70,11 @@ namespace AvaloniaApplication3.Models
                         {
                             Directory.CreateDirectory("ErrorFolder");
                         }
-                        using (StreamWriter fs = new StreamWriter($"ErrorFolder/errorlog {day +" "+ tiks}.txt",false))
+                        using (StreamWriter fs = new StreamWriter($"ErrorFolder/errorlog {day + " " + tiks}.txt", false))
                         {
                             fs.Write(e.Message);
                         }
-                        using(FileStream fs = new FileStream($"ErrorFolder/errorlog {day + " " + tiks}.json", FileMode.OpenOrCreate))
+                        using (FileStream fs = new FileStream($"ErrorFolder/errorlog {day + " " + tiks}.json", FileMode.OpenOrCreate))
                         {
                             List<string> list = new List<string>()
                             {
@@ -100,36 +97,48 @@ namespace AvaloniaApplication3.Models
             }
         }
 
-        public static List<object> Generator_Equasion_Sum_Multiplication(int Lower, int Top, string sign, int MaxNumer, int MaxDenom) //метод позволяющий по введённым параметрам сгенерировать дроби для равенства(для + и умножения)
+        public static Wrapper_fractions Generator_Equasion_Sum_Multiplication(int Lower, int Top, string sign, int MaxNumer, int MaxDenom) //метод позволяющий по введённым параметрам сгенерировать дроби для равенства(для + и умножения)
         {
             Random rnd = new Random();
+            int index_letter = 0;
+            List<string> term = new List<string>();   //финальное выражение
+            Dictionary<string, Fraction> fraction_substitutions = new Dictionary<string, Fraction>();  // словарь замен дроби на букву
 
-            List<object> equasion = new List<object>();
-            int number_of_fractions = rnd.Next(Lower, Top + 1);
-            for (int i = 0; i < number_of_fractions; i++)   //добавил +1, чтобы логичней были промежутки, так промежуток от 2 до 2, будет в рандомк от 2 до 3, три не включая и так будет точно 2
+            int number_of_fractions = rnd.Next(Lower, Top + 1); //(число дробей); добавил +1, чтобы логичней были промежутки, так промежуток от 2 до 2, будет в рандомк от 2 до 3, три не включая и так будет точно 2
+            
+            for (int i = 0; i < number_of_fractions; i++)   
             {
                 int numerator = rnd.Next(1, MaxNumer);
-                int denominator = rnd.Next(numerator+1, (1+numerator) * MaxDenom);
-                equasion.Add(new Fraction(numerator, denominator));
-                equasion.Add(sign);
+                int denominator = rnd.Next(numerator, numerator * MaxDenom);
+                string replacement_letter = "F" + index_letter;                   //переменная для замены
+
+                fraction_substitutions.Add(replacement_letter, new Fraction(numerator, denominator));
+                term.Add(replacement_letter);
+                term.Add(sign);
+                index_letter++;
             }
-            equasion.RemoveAt(equasion.Count - 1);
-            return equasion;
+
+            term.RemoveAt(term.Count - 1);
+            return new Wrapper_fractions(term, fraction_substitutions);
         }
 
-        public static List<object> Generator_Equasion_Subtraction(int Lower, int Top, int MaxNumer, int MaxDenom) //метод позволяющий по введённым параметрам сгенерировать дроби для равенства c разностью
+        public static Wrapper_fractions Generator_Equasion_Subtraction(int Lower, int Top, int MaxNumer, int MaxDenom) //метод позволяющий по введённым параметрам сгенерировать дроби для равенства c разностью
         {
             Random rnd = new Random();
             Fraction Fraction_calculated; //дробь, для создания новой дроби,в этой дроби лежит текущий ответ (разность дробей)
             Fraction Fraction_prom;       //дробь для подсчёта новой Fraction_calculated
-
-            List<object> equasion = new List<object>();
+            int index_letter = 1;
+            List<string> term = new List<string>();   //финальное выражение
+            Dictionary<string, Fraction> fraction_substitutions = new Dictionary<string, Fraction>();  // словарь замен дроби на букву
             
             int numerator = rnd.Next(1, MaxNumer);
-            int denominator = rnd.Next(1+numerator, (1+numerator) + MaxDenom);
+            int denominator = rnd.Next(1+numerator, numerator + MaxDenom);
             Fraction_calculated = new Fraction(numerator, denominator);
-            equasion.Add(Fraction_calculated);
-            equasion.Add("-");
+
+            string replacement_letter = "F" + 0;                   //переменная для замены
+            fraction_substitutions.Add(replacement_letter, new Fraction(numerator, denominator));
+            term.Add(replacement_letter);
+            term.Add("-");
 
             int number_of_fractions = rnd.Next(Lower, Top + 1); //добавил +1, чтобы логичней были промежутки
 
@@ -139,18 +148,26 @@ namespace AvaloniaApplication3.Models
                 denominator = rnd.Next(((int)Fraction_calculated.Denominator) + 1, ((int)Fraction_calculated.Denominator) + MaxDenom); 
                 Fraction_prom = new Fraction(numerator, denominator);
 
-                Fraction_calculated = new Fraction((Fraction_calculated - Fraction_prom).Numerator, (Fraction_calculated - Fraction_prom).Denominator); //новая дробь с учётом добавленной 
+                Fraction_calculated = Fraction_calculated - Fraction_prom; //новая дробь с учётом добавленной 
 
-                equasion.Add(Fraction_prom);
-                equasion.Add("-");
+                replacement_letter = "F" + index_letter;                                              //переменная для замены
+                fraction_substitutions.Add(replacement_letter, Fraction_prom);
+                term.Add(replacement_letter);
+                term.Add("-");
+                index_letter++;
             }
-            equasion.RemoveAt(equasion.Count - 1);
-            return equasion;
+            term.RemoveAt(term.Count - 1);
+            return new Wrapper_fractions(term, fraction_substitutions);
+        }
+
+        public static Wrapper_fractions Generator_Equasion_Mixed(int Lower, int Top, int MaxNumer, int MaxDenom) //метод позволяющий по введённым параметрам сгенерировать дроби для смешаного равенства(с минусом и плюсом)
+        {
+            throw new NotImplementedException();
         }
 
         public class EasyDifficultyEquasionSum: IEquasionGenerator // простая сложность для сложения
         {
-            public List<object> GenerateEquasion()
+            public Wrapper_fractions GenerateEquasion()
             {
                
                 return Generator_Equasion_Sum_Multiplication(2,2,"+",MaxEasyNumerator, MultiplayerCoefficientForDenominatorRange);
@@ -160,21 +177,8 @@ namespace AvaloniaApplication3.Models
 
         public class EasyDifficultyEquasionSubtraction : IEquasionGenerator // простая сложность для вычитания
         {
-            public List<object> GenerateEquasion()
+            public Wrapper_fractions GenerateEquasion()
             {
-
-                //Random rnd = new Random();
-
-                //List<object> equasion = new List<object>();
-
-                //int numerator = rnd.Next(1, MaxEasyNumerator);
-                //int denominator = rnd.Next(1 + numerator, numerator + PlusSubtractionCoefficientForDenominatorRange);
-                //equasion.Add(new Fraction(numerator, denominator));
-                //equasion.Add("-");
-
-                //numerator = rnd.Next(1, numerator);
-                //denominator = rnd.Next(denominator +1, denominator + PlusSubtractionCoefficientForDenominatorRange);
-                //equasion.Add(new Fraction(numerator, denominator));
 
                 return Generator_Equasion_Subtraction(2,2, MaxEasyNumerator, PlusSubtractionCoefficientForDenominatorRange);
             }
@@ -182,20 +186,8 @@ namespace AvaloniaApplication3.Models
 
         public class EasyDifficultyEquasionMultiply : IEquasionGenerator // простая сложность для умножения
         {
-            public List<object> GenerateEquasion()
+            public Wrapper_fractions GenerateEquasion()
             {
-
-                //Random rnd = new Random();
-
-                //List<object> equasion = new List<object>();
-                //for (int i = 0; i < 3; i++)
-                //{
-                //    int numerator = rnd.Next(1, MaxEasyNumerator);
-                //    int denominator = rnd.Next(1 + numerator, 1 + numerator * MultiplayerCoefficientForDenominatorRange);
-                //    equasion.Add(new Fraction(numerator, denominator));
-                //    equasion.Add("*");
-                //}
-                //equasion.RemoveAt(equasion.Count - 1);
 
                 return Generator_Equasion_Sum_Multiplication(2, 2, "*", MaxEasyNumerator, MultiplayerCoefficientForDenominatorRange); ;
             }
@@ -204,19 +196,8 @@ namespace AvaloniaApplication3.Models
 
         public class MediumDifficultyEquasionSum: IEquasionGenerator // средняя сложность для сложения
         {
-            public List<object> GenerateEquasion()
+            public Wrapper_fractions GenerateEquasion()
             {
-                //Random rnd = new Random();
-
-                //List<object> equasion = new List<object>();
-                //for (int i = 0; i < rnd.Next(1, 3); i++)
-                //{
-                //    int numerator = rnd.Next(0, MaxMediumNumerator);
-                //    int denominator = rnd.Next(numerator, numerator * MultiplayerCoefficientForDenominatorRange);
-                //    equasion.Add(new Fraction(numerator, denominator));
-                //    equasion.Add("+");
-                //}
-                //equasion.RemoveAt(equasion.Count - 1);
 
                 return Generator_Equasion_Sum_Multiplication(2, 3, "+", MaxMediumNumerator, MultiplayerCoefficientForDenominatorRange);
             }
@@ -225,21 +206,9 @@ namespace AvaloniaApplication3.Models
 
         public class MediumDifficultyEquasionSubtraction : IEquasionGenerator // средняя сложность для вычитания
         {
-            public List<object> GenerateEquasion()
+            public Wrapper_fractions GenerateEquasion()
             {
 
-                //Random rnd = new Random();
-
-                //List<object> equasion = new List<object>();
-
-                //int numerator = rnd.Next(1, MaxEasyNumerator);
-                //int denominator = rnd.Next(1 + numerator, numerator + PlusSubtractionCoefficientForDenominatorRange);
-                //equasion.Add(new Fraction(numerator, denominator));
-                //equasion.Add("-");
-
-                //numerator = rnd.Next(1, numerator);
-                //denominator = rnd.Next(denominator + 1, denominator + PlusSubtractionCoefficientForDenominatorRange);
-                //equasion.Add(new Fraction(numerator, denominator));
 
                 return Generator_Equasion_Subtraction(2, 3, MaxMediumNumerator, PlusSubtractionCoefficientForDenominatorRange);
             }
@@ -247,20 +216,9 @@ namespace AvaloniaApplication3.Models
 
         public class MediumDifficultyEquasionMultiply : IEquasionGenerator // средняя сложность для умножения
         {
-            public List<object> GenerateEquasion()
+            public Wrapper_fractions GenerateEquasion()
             {
 
-                //Random rnd = new Random();
-
-                //List<object> equasion = new List<object>();
-                //for (int i = 0; i < 3; i++)
-                //{
-                //    int numerator = rnd.Next(1, MaxEasyNumerator);
-                //    int denominator = rnd.Next(1 + numerator, 1 + numerator * MultiplayerCoefficientForDenominatorRange);
-                //    equasion.Add(new Fraction(numerator, denominator));
-                //    equasion.Add("*");
-                //}
-                //equasion.RemoveAt(equasion.Count - 1);
 
                 return Generator_Equasion_Sum_Multiplication(2, 3, "*", MaxMediumNumerator, MultiplayerCoefficientForDenominatorRange);
             }
@@ -268,17 +226,8 @@ namespace AvaloniaApplication3.Models
 
         public class HighDifficultyEquasionSum : IEquasionGenerator // сложная сложность для сложения
         {
-            public List<object> GenerateEquasion()
+            public Wrapper_fractions GenerateEquasion()
             {
-                //Random rnd = new Random();
-
-                //List<object> equasion = new List<object>();
-                //for (int i = 0; i < rnd.Next(2, 4); i++)
-                //{
-                //    int numerator = rnd.Next(0, MaxHardNumerator);
-                //    int denominator = rnd.Next(numerator, numerator * MultiplayerCoefficientForDenominatorRange);
-                //    equasion.Add(new Fraction(numerator, denominator));
-                //}
 
                 return Generator_Equasion_Sum_Multiplication(2, 4, "+", MaxHardNumerator, MultiplayerCoefficientForDenominatorRange);
             }
@@ -286,20 +235,8 @@ namespace AvaloniaApplication3.Models
 
         public class HighDifficultyEquasionSubtraction : IEquasionGenerator // средняя сложность для умножения
         {
-            public List<object> GenerateEquasion()
+            public Wrapper_fractions GenerateEquasion()
             {
-
-                //Random rnd = new Random();
-
-                //List<object> equasion = new List<object>();
-                //for (int i = 0; i < 3; i++)
-                //{
-                //    int numerator = rnd.Next(1, MaxEasyNumerator);
-                //    int denominator = rnd.Next(1 + numerator, 1 + numerator * MultiplayerCoefficientForDenominatorRange);
-                //    equasion.Add(new Fraction(numerator, denominator));
-                //    equasion.Add("*");
-                //}
-                //equasion.RemoveAt(equasion.Count - 1);
 
                 return Generator_Equasion_Subtraction(2, 4, MaxHardNumerator, PlusSubtractionCoefficientForDenominatorRange);
             }
@@ -307,18 +244,8 @@ namespace AvaloniaApplication3.Models
 
         public class HighDifficultyEquasionMultiply : IEquasionGenerator // сложная сложность для сложения
         {
-            public List<object> GenerateEquasion()
+            public Wrapper_fractions GenerateEquasion()
             {
-                //Random rnd = new Random();
-
-                //List<object> equasion = new List<object>();
-                //for (int i = 0; i < rnd.Next(2, 4); i++)
-                //{
-                //    int numerator = rnd.Next(0, MaxHardNumerator);
-                //    int denominator = rnd.Next(numerator, numerator * MultiplayerCoefficientForDenominatorRange);
-                //    equasion.Add(new Fraction(numerator, denominator));
-                //}
-
                 return Generator_Equasion_Sum_Multiplication(2, 4, "*", MaxHardNumerator, MultiplayerCoefficientForDenominatorRange);
             }
         }

@@ -35,19 +35,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <AvaloniaResource Remove="Assets\old\EightOfACircle.png" />
-    <AvaloniaResource Remove="Assets\old\EightOfTwelve.png" />
-    <AvaloniaResource Remove="Assets\old\emptyOneOfThree.png" />
-    <AvaloniaResource Remove="Assets\old\FifthOfACircle.png" />
-    <AvaloniaResource Remove="Assets\old\FiveOfEight.png" />
-    <AvaloniaResource Remove="Assets\old\FourOfASix.png" />
-    <AvaloniaResource Remove="Assets\old\FourOfFive.png" />
-    <AvaloniaResource Remove="Assets\old\FourthCircle.png" />
-    <AvaloniaResource Remove="Assets\old\HalfCircle.png" />
-    <AvaloniaResource Remove="Assets\old\OneOfFour.png" />
-    <AvaloniaResource Remove="Assets\old\ThreeCircle.png" />
-    <AvaloniaResource Remove="Assets\old\TvelveCircle.png" />
-    <AvaloniaResource Remove="Assets\old\TwoOfAThree.png" />
+    <AvaloniaResource Remove="Assets\old\**" />
+    <AvaloniaXaml Remove="Assets\old\**" />
+    <Compile Remove="Assets\old\**" />
+    <EmbeddedResource Remove="Assets\old\**" />
+    <None Remove="Assets\old\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -94,9 +86,5 @@
     <Content Include="AllRes\JSON_Instruction.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Assets\old\" />
   </ItemGroup>
 </Project>

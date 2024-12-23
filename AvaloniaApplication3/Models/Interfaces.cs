@@ -5,16 +5,16 @@ namespace AvaloniaApplication3.Models
 {
     public interface IEquasionGenerator
     {
-        List<object> GenerateEquasion();
+        Wrapper_fractions GenerateEquasion();
     }
 
     public interface ISolver
     {
-        Fraction Solve(List<object> equasion);
+        Fraction Solve(List<string> OPS, Dictionary<string, Fraction> fraction_substitutions);
     }
     public interface IOPZ
     {
-        public List<object> CalculateOPZ(List<object> data_from_string);
+        public List<string> CalculateOPZ(List<string> data_from_string);
     }
 
 }

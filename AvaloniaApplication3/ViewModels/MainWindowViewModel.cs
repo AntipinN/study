@@ -25,6 +25,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Text.Json.Serialization;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
+using Avalonia.Data;
 
 namespace AvaloniaApplication3.ViewModels
 {
@@ -32,8 +33,8 @@ namespace AvaloniaApplication3.ViewModels
     {
         public MainWindowViewModel()
         {
-            //SettingsSerializer();
-            
+            SettingsSerializer();
+
             SettingsInit();
             GenerateTimer();
 
@@ -60,7 +61,7 @@ namespace AvaloniaApplication3.ViewModels
             SetDefaultValuesForSettings = new RelayCommand(SetDefaultSettings);
             GetInstructionCommand = new RelayCommand(GetInstructionFromData);
             GetInstructionFromData();
-            
+
         }
 
 
@@ -69,7 +70,7 @@ namespace AvaloniaApplication3.ViewModels
 
         #region
 
-       
+
         #endregion
 
         #region Settings
@@ -79,6 +80,7 @@ namespace AvaloniaApplication3.ViewModels
         {
             InterfaceTitleSize = value + 12;
             InterfaceTextSizeChanging = value;
+            InstructionImageSize = InstructionImageSize + value * 2;
         }
         [ObservableProperty]
         private int interfaceTitleSize = 26 + 12;
@@ -88,6 +90,14 @@ namespace AvaloniaApplication3.ViewModels
         private int musicSize = 5;
         [ObservableProperty]
         private int interfaceTextSizeChanging = 26;
+        [ObservableProperty]
+        private int instructionImageSize = 200;
+        [ObservableProperty]
+        private int publicInstrImageSize = 200;
+        partial void OnPublicInstrImageSizeChanging(int value)
+        {
+            InstructionImageSize = value + InterfaceTextSize * 2;
+        }
         void setSettings()
         {
             InterfaceTextSize = InterfaceTextSizeChanging;
@@ -114,7 +124,7 @@ namespace AvaloniaApplication3.ViewModels
                 LightTheme = true;
                 DefaultTheme = false;
                 DarkTheme = false;
-               
+
             }
             else if (ThemeVary == ThemeVariant.Dark)
             {
@@ -128,7 +138,7 @@ namespace AvaloniaApplication3.ViewModels
                 DarkTheme = false;
                 LightTheme = false;
             }
-            
+
         }
         void SetDefaultSettings()
         {
@@ -149,13 +159,23 @@ namespace AvaloniaApplication3.ViewModels
         bool defaultTheme = true;
         void SettingsInit()
         {
-            SettingsClass settings;
-            using (FileStream fs = new FileStream("AllRes/Settings.json", FileMode.OpenOrCreate))
+            try
             {
-                settings = JsonSerializer.Deserialize<SettingsClass>(fs);
+
+                SettingsClass settings;
+                using (FileStream fs = new FileStream("AllRes/Settings.json", FileMode.Open))
+                {
+                    settings = JsonSerializer.Deserialize<SettingsClass>(fs);
+                }
+
+                InterfaceTextSize = settings.InterfaceTextSize;
+                PublicInstrImageSize = settings.ImageSize;
             }
-            
-            InterfaceTextSize = settings.InterfaceTextSize;
+            catch (Exception e)
+            {
+                ErrorHandlerSaverClass.HandleError(e);
+            }
+
             //ThemeVary = settings.Theme;
             if (ThemeVary == ThemeVariant.Default)
             {
@@ -178,7 +198,7 @@ namespace AvaloniaApplication3.ViewModels
         }
         void SettingsSerializer()
         {
-            SettingsClass settings = new SettingsClass(InterfaceTextSize, ThemeVary);
+            SettingsClass settings = new SettingsClass(InterfaceTextSize, ThemeVary, PublicInstrImageSize);
             using (FileStream fs = new FileStream("AllRes/Settings.json", FileMode.Create))
             {
                 JsonSerializer.Serialize(fs, settings);
@@ -193,24 +213,21 @@ namespace AvaloniaApplication3.ViewModels
         string hard = "Высокий";
         [ObservableProperty]
         static string back = "Назад";
-        
+
         #endregion
 
         #endregion
-        
+
         #region Instruction
 
-        [ObservableProperty] 
+        [ObservableProperty]
         private Text_for_presentation instructionText;
 
-        [ObservableProperty] 
+        [ObservableProperty]
         private List<TextBlock> textBlockInstruction = new List<TextBlock>();
 
         [ObservableProperty]
         private List<WrapPanel> viewBlockInstruction = new List<WrapPanel>();
-
-        
-
         void GetInstructionFromData()
         {
             if (InstructionText is null)
@@ -218,30 +235,31 @@ namespace AvaloniaApplication3.ViewModels
                 InstructionText = new Text_for_presentation();
                 for (int i = 0; i < InstructionText.text.Count; i++)
                 {
+
                     TextBlock tb = new TextBlock()
                     {
                         Classes = { "InstructionTB" },
                         Text = InstructionText.text[i]
-                        
                     };
                     TextBlockInstruction.Add(tb);
 
                     WrapPanel s = new WrapPanel() { Orientation = Orientation.Horizontal, Classes = { "VerHorAllCenter" } };
-                    
-                    foreach(string w in InstructionText.view[i])
+
+                    foreach (string w in InstructionText.view[i])
                     {
                         Button button;
                         if (w.Contains("avares"))
                         {
                             Bitmap bit = new Bitmap(AssetLoader.Open(new System.Uri(w)));
-                            Image image = new Image() { Source = bit, Height = 300 };
+                            Image image = new Image() { Source = bit, [!Image.HeightProperty] = new Binding("InstructionImageSize") };
+
                             s.Children.Add(image);
                         }
                         else
                         {
 
-                      
-                        Regex regex = new Regex(@"(\(?[a-zA-Z0-9]+((∗|\+|\-)?[a-zA-Z0-9]+)*\)?/\(?[a-zA-Z0-9]+((∗|\+|\-)?[a-zA-Z0-9]+)*\)?)|([0-9]+/[0-9]+)|([<]*[=]+[>]*|([0-9]+))|([;])|([a-zA-Z]/[a-zA-Z])");
+
+                            Regex regex = new Regex(@"(\(?[a-zA-Z0-9]+((∗|\+|\-)?[a-zA-Z0-9]+)*\)?/\(?[a-zA-Z0-9]+((∗|\+|\-)?[a-zA-Z0-9]+)*\)?)|([0-9]+/[0-9]+)|([<]*[=]+[>]*|([0-9]+))|([;])|([a-zA-Z]/[a-zA-Z])|([\D]+/[\D]+)");
                             if (w.Length > 0)
                             {
                                 bool entered = false;
@@ -281,7 +299,7 @@ namespace AvaloniaApplication3.ViewModels
                 }
             }
         }
-        
+
         #endregion
 
         #region Game Data
@@ -377,7 +395,7 @@ namespace AvaloniaApplication3.ViewModels
             {
                 CreateGame(EasySubtractGame);
             }
-            else if(EasyMultiplyGameCreated)
+            else if (EasyMultiplyGameCreated)
             {
                 CreateGame(EasyMultiplyGame);
             }
@@ -406,7 +424,7 @@ namespace AvaloniaApplication3.ViewModels
                 CreateGame(HardMultiplyGame);
             }
         }
-        
+
 
         void CreateEasySumGame()
         {
@@ -475,7 +493,7 @@ namespace AvaloniaApplication3.ViewModels
         void SaveResults()
         {
             int seconds = 0;
-            foreach(int i in gameTime)
+            foreach (int i in gameTime)
             {
                 seconds += i;
             }
@@ -517,7 +535,7 @@ namespace AvaloniaApplication3.ViewModels
             {
                 sb.Append("уравнений");
             }
-            
+
             return sb.ToString();
         }
         string TimePresenter(ref DateTime dateTime)
@@ -551,7 +569,7 @@ namespace AvaloniaApplication3.ViewModels
             }
             if (dateTime.Minute != 0)
             {
-                if(sb.Length > 0)
+                if (sb.Length > 0)
                 {
                     sb.Append(' ');
                 }
@@ -579,7 +597,7 @@ namespace AvaloniaApplication3.ViewModels
                     sb.Append("минут");
                 }
             }
-            if(dateTime.Second != 0)
+            if (dateTime.Second != 0)
             {
                 if (sb.Length > 0)
                 {
@@ -654,20 +672,20 @@ namespace AvaloniaApplication3.ViewModels
             List<object> ButtonsTextBlock = new List<object>();
             List<object> ButtonsTextBox = new List<object>();
             int i = 0;
-            List<string> gameObjects = Game.GetExpression();
-            foreach (string o in gameObjects)
-            {   
-                string[] list = o.ToString().Split(new char[] { '/', '\n' }, StringSplitOptions.RemoveEmptyEntries);
-                Button tmpButtonOne = new Button() { Classes = {"GameButtons"} };
-                Button tmpButtonTwo = new Button() { Classes = {"GameButtons"} };
-                if (list.Length > 1)
+            Wrapper_fractions gameObjects = Game.GetExpression();
+            foreach (string o in gameObjects.term)
+            {
+                Button tmpButtonOne = new Button() { Classes = { "GameButtons" } };
+                Button tmpButtonTwo = new Button() { Classes = { "GameButtons" } };
+                Fraction currentFraction;
+                if (gameObjects.fraction_substitutions.TryGetValue(o, out currentFraction))
                 {
-                    CreateGameSubFunkForFraction(ref list, ref gameObjects, ref tmpButtonOne, ref tmpButtonTwo, ref i);
+                    CreateGameSubFunkForFraction(ref currentFraction, ref gameObjects.term, ref tmpButtonOne, ref tmpButtonTwo, ref i);
                 }
                 else
                 {
-                    tmpButtonOne.Content = new TextBlock() { Text = list[0], Classes = { "GameTextBlock" }, VerticalAlignment = Avalonia.Layout.VerticalAlignment.Center };
-                    tmpButtonTwo.Content = new TextBlock() { Text = list[0], Classes = { "GameTextBlock" }, VerticalAlignment = Avalonia.Layout.VerticalAlignment.Center };
+                    tmpButtonOne.Content = new TextBlock() { Text = o, Classes = { "GameTextBlock" }, VerticalAlignment = Avalonia.Layout.VerticalAlignment.Center };
+                    tmpButtonTwo.Content = new TextBlock() { Text = o, Classes = { "GameTextBlock" }, VerticalAlignment = Avalonia.Layout.VerticalAlignment.Center };
                 }
                 ButtonsTextBlock.Add(tmpButtonOne);
                 ButtonsTextBox.Add(tmpButtonTwo);
@@ -678,46 +696,47 @@ namespace AvaloniaApplication3.ViewModels
             GenerateEquasionIsActive = false;
             StartTimer();
         }
-        void CreateGameSubFunkForFraction(ref string[] list, ref List<string> gameObjects,  ref Button tmpButtonOne, ref Button tmpButtonTwo, ref int i )
+        void CreateGameSubFunkForFraction(ref Fraction currentFraction, ref List<string> gameObjects, ref Button tmpButtonOne, ref Button tmpButtonTwo, ref int i)
         {
-            string middle = string.Concat(Enumerable.Repeat("―", Math.Max(list[0].Length, list[1].Length)));
+            string numerator = currentFraction.Numerator.ToString();
+            string denominator = currentFraction.Denominator.ToString();
+            string middle = string.Concat(Enumerable.Repeat("―", Math.Max(numerator.Length, denominator.Length)));
             StackPanel st = new StackPanel() { Classes = { "VerHorAllCenter" } };
 
-            st.Children.Add(new TextBlock() { Text = list[0], Classes = { "GameTextBlock" } });
+            st.Children.Add(new TextBlock() { Text = numerator, Classes = { "GameTextBlock" } });
             st.Children.Add(new TextBlock() { Text = middle, Height = 10, Classes = { "GameTextBlock" }, VerticalAlignment = Avalonia.Layout.VerticalAlignment.Center });
-            st.Children.Add(new TextBlock() { Text = list[1], Classes = { "GameTextBlock" } });
+            st.Children.Add(new TextBlock() { Text = denominator, Classes = { "GameTextBlock" } });
 
             tmpButtonOne.Content = st;
 
-            middle = string.Concat(Enumerable.Repeat("―", Math.Max(list[0].Length, list[1].Length)));
+            middle = string.Concat(Enumerable.Repeat("―", Math.Max(numerator.Length, denominator.Length)));
             st = new StackPanel() { Classes = { "VerHorAllCenter" } };
 
             if (i < gameObjects.Count - 1)
             {
-                st.Children.Add(new TextBlock() { Text = list[0], Classes = { "GameTextBlock" } });
+                st.Children.Add(new TextBlock() { Text = numerator, Classes = { "GameTextBlock" } });
                 st.Children.Add(new TextBlock() { Text = middle, Height = 10, TextAlignment = TextAlignment.Center, VerticalAlignment = Avalonia.Layout.VerticalAlignment.Center });
-                st.Children.Add(new TextBlock() { Text = list[1], Classes = { "GameTextBlock" } });
+                st.Children.Add(new TextBlock() { Text = denominator, Classes = { "GameTextBlock" } });
             }
             else
             {
-                TextBox tb = new TextBox() {Text = "", TextAlignment = TextAlignment.Justify, HorizontalContentAlignment = Avalonia.Layout.HorizontalAlignment.Center, MaxLength = 14};
+                TextBox tb = new TextBox() { Text = "", TextAlignment = TextAlignment.Justify, HorizontalContentAlignment = Avalonia.Layout.HorizontalAlignment.Center, MaxLength = 14 };
                 tb.TextChanging += TextChanged; //Костыль для корректного отображения горизонтального выравнивания
                 tb.KeyDown += TextFilter; //Фильтрация всех символов кроме цифр и обработка клавиши Enter
+                tb.PastingFromClipboard += PastingIntercept;
                 st.Children.Add(tb);
-                
+
                 Numerator = tb; //сохраняем TextBox числителя для отслеживания
 
                 st.Children.Add(new TextBlock() { Text = middle, Height = 10, TextAlignment = TextAlignment.Center, VerticalAlignment = Avalonia.Layout.VerticalAlignment.Center, });
                 tb = new TextBox() { Text = "", TextAlignment = TextAlignment.Justify, HorizontalContentAlignment = Avalonia.Layout.HorizontalAlignment.Center, MaxLength = 14 };
                 tb.TextChanging += TextChanged; //Костыль для корректного отображения горизонтального выравнивания
                 tb.KeyDown += TextFilter; //Фильтрация всех символов кроме цифр и обработка клавиши Enter
+                tb.PastingFromClipboard += PastingIntercept;
                 st.Children.Add(tb);
-                
+
                 Denominator = tb; //Сохраняем TextBox знаменателя для отслеживания
             }
-            //st.Children.Add(new TextBlock() { Text = middle, Height = 10, TextAlignment = TextAlignment.Center, VerticalAlignment = Avalonia.Layout.VerticalAlignment.Center });
-            //st.Children.Add(new TextBlock() { Text = list[1], Classes = { "GameTextBlock" } });
-            //tmpButton.Content = $"{list[0]}{middle}{list[1]}";
 
             tmpButtonTwo.Content = st;
         }
@@ -733,72 +752,39 @@ namespace AvaloniaApplication3.ViewModels
         {
             Regex reg = new Regex(@"\D");
             string s = e.KeySymbol;
-            if(e.PhysicalKey == PhysicalKey.Enter || e.PhysicalKey == PhysicalKey.NumPadEnter)
+            if (e.PhysicalKey == PhysicalKey.Enter || e.PhysicalKey == PhysicalKey.NumPadEnter)
             {
                 VerifyAnswerCommand.Execute(sender);
-            } 
+            }
             if (s is not null && reg.IsMatch(s))
             {
                 e.Handled = true;
             }
-
+        }
+        void PastingIntercept(object sender, Avalonia.Interactivity.RoutedEventArgs e)
+        {
+            e.Handled = true;
         }
         public void VerifyAnswer()
         {
             IsEqusaisonIncorrect = false;
-            //for (int i = 0; i < AnswerEquasion.Count; i++)
-            //{
-            //    if((AnswerEquasion[i] is Button) && (AnswerEquasion[i] as Button).Content is StackPanel)
-            //    {
-            //        StackPanel st = ((AnswerEquasion[i] as Button).Content as StackPanel);
 
-            //        for (int j = 0; j < st.Children.Count; j++)
-            //        {
-            //            if (st.Children[j] is TextBox)
-            //            {
-            //                if (j < st.Children.Count - 1)
-            //                {
-            //                    string Answer = (st.Children[j] as TextBox).Text + "/";
-            //                    if (st.Children[j + 2] is TextBlock)
-            //                    {
-            //                        Answer += (st.Children[j + 2] as TextBlock).Text;
-            //                    }
-            //                    else
-            //                    {
-            //                        Answer += (st.Children[j + 2] as TextBox).Text;
-            //                    }
-            //                    string Origin = ((((Equasion[i] as Button).Content as StackPanel).Children[j]) as TextBlock).Text + "/" + ((((Equasion[i] as Button).Content as StackPanel).Children[j + 2]) as TextBlock).Text;
-            //                    if (!CurrentGame.CheckEquasion(Answer, Origin))
-            //                    {
-            //                        IsEqusaisonIncorrect = true;
-            //                        GenerateEquasionIsActive = false;
-            //                        return;
-            //                    }
-            //                    //if ((st.Children[j] as TextBox).Text != ((((Equasion[i]as Button).Content as StackPanel).Children[j]) as TextBlock).Text)
-            //                    //{
-            //                    //    
-            //                    //}
-            //                }
-            //            }
-            //        }
-            //    }
-            //}
-            Regex checkForCorrectLine = new Regex(@"[1-9]+[0-9]");
+            Regex checkForCorrectLine = new Regex(@"[1-9]+[0-9]*");
             Match denominatorCorrect = checkForCorrectLine.Match(Denominator.Text);
             ErrorMessage = "";
             if (Numerator is not null && Numerator.Text is not null && Numerator.Text.Length > 1 && Numerator.Text[0] == '0')
             {
                 ErrorMessage += "Числитель не может начинаться с нуля!";
             }
-            if(denominatorCorrect.Length < Denominator.Text.Length)
+            if (denominatorCorrect.Length < Denominator.Text.Length)
             {
-                if(errorMessage.Length > 0)
+                if (errorMessage.Length > 0)
                 {
                     ErrorMessage += '\n';
                 }
                 ErrorMessage += "Знаменатель не может быть нулём или начинаться с него!";
             }
-            if(ErrorMessage.Length > 0)
+            if (ErrorMessage.Length > 0)
             {
                 IsEqusaisonIncorrect = true;
                 GenerateEquasionIsActive = false;

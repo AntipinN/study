@@ -1,17 +1,19 @@
-﻿using System.Collections.Generic;
+﻿using Microsoft.VisualBasic;
+using System;
+using System.Collections.Generic;
 
 
 namespace AvaloniaApplication3.Models
 {
-    internal class FractionEquasionSolver : ISolver
+    public class FractionEquasionSolver : ISolver //клас для считания дробей
     { 
-        public Fraction Solve(List<object> OPS)
+        public Fraction Solve(List<string> OPS, Dictionary<string, Fraction> fraction_substitutions)
         {
         Stack<Fraction> fractions = new Stack<Fraction>();
         Fraction fraction_prom1 = new Fraction(1, 1);         //просто промежуточная дробь,чтобы в каждом case не создавать новую
         Fraction fraction_prom2 = new Fraction(1, 1);
 
-        foreach (object symbol in OPS)
+        foreach (string symbol in OPS)
         {
             switch (symbol)
             {
@@ -41,14 +43,14 @@ namespace AvaloniaApplication3.Models
 
                 default:  //если не оператор, то это либо число, либо дробь
 
-                    if (!(symbol is Fraction))   //если число, то привращаем в дробь
+                    if (char.IsDigit(symbol[0]))   //если число, то привращаем в дробь (проверяем по средством того,юуква это или нет,так как если это буква то это заменённая дробь)
                     {
-                        fraction_prom1 = new Fraction((long)symbol, 1);
+                        fraction_prom1 = new Fraction(long.Parse(symbol), 1);
                         fractions.Push(fraction_prom1);
                     }
                     else
                     {
-                        Fraction f = (Fraction)symbol;
+                        Fraction f = fraction_substitutions[symbol];
                         fractions.Push(new Fraction(f.Numerator, f.Denominator));
                     }
                     break;

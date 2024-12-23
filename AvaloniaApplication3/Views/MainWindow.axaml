@@ -34,7 +34,7 @@
 			<ColumnDefinition/>
 		</Grid.ColumnDefinitions>
 		
-		<StackPanel x:Name="MainMenu" Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" IsVisible="True" IsEnabled="True">
+		<StackPanel x:Name="MainMenu" Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" IsVisible="false" IsEnabled="True">
 			<TextBlock Classes="ThemeTB" Text="Великий тренер дробей!" FontSize="{Binding InterfaceTitleSize}"/>
 			<Button  Classes="b1" Content="Тренироваться" FontSize="{Binding InterfaceTextSize}" Click="Button_Click_MainMenu"/>
 			<Button  Classes="b1" Content="Теория" FontSize="{Binding InterfaceTextSize}" Click="Button_Click_MainMenu" Command="{Binding GetInstructionCommand}"/>
@@ -42,7 +42,7 @@
 			<Button  Classes="b1" Content="Выйти" FontSize="{Binding InterfaceTextSize}" Click="Button_Click_MainMenu"/>
 		</StackPanel>
 		
-		<Panel x:Name= "InstructionMenu" IsVisible="False" Margin="20">
+		<Panel x:Name= "InstructionMenu" IsVisible="True" Margin="20" KeyDown="Panel_KeyDown">
 				<Button Background="{DynamicResource BackgroundBrush}" Click="Previous" FontSize="{Binding InterfaceTextSize}">&lt;</Button>
 				<Button Background="{DynamicResource BackgroundBrush}" Click="Next" HorizontalAlignment="Right" FontSize="{Binding InterfaceTextSize}">&gt;</Button>
 				<Grid HorizontalAlignment="Stretch" Width="" ShowGridLines="False">
@@ -125,9 +125,9 @@
 							<TextBlock Text="{Binding SoundSize}" FontSize="{Binding InterfaceTextSize}" VerticalAlignment="Center"/>
 						</WrapPanel>
 						<WrapPanel HorizontalAlignment="Center">
-							<TextBlock Text="Музыка: " TextWrapping="Wrap" FontSize="{Binding InterfaceTextSize}" VerticalAlignment="Center"/>
-							<Slider x:Name="MusicSize" Minimum="0" Maximum="10" Width="100" Value="{Binding MusicSize}" VerticalAlignment="Center"/>
-							<TextBlock Text="{Binding MusicSize}" FontSize="{Binding InterfaceTextSize}" VerticalAlignment="Center"/>
+							<TextBlock Text="Размер картинок: " TextWrapping="Wrap" FontSize="{Binding InterfaceTextSize}" VerticalAlignment="Center"/>
+							<Slider x:Name="PictureSize" Minimum="100" Maximum="250" Width="100" Value="{Binding PublicInstrImageSize}" VerticalAlignment="Center"/>
+							<TextBlock Text="{Binding PublicInstrImageSize}" FontSize="{Binding InterfaceTextSize}" VerticalAlignment="Center"/>
 						</WrapPanel>
 						<WrapPanel HorizontalAlignment="Center">
 							<RadioButton Content="Light" FontSize="{Binding InterfaceTextSize}" IsChecked="{Binding LightTheme}" Margin="5,0,5,0" />

@@ -5,10 +5,10 @@ namespace AvaloniaApplication3.Models
 {
     public class UniversalOPZFormer : IOPZ
     {
-        public List<object> CalculateOPZ(List<object> data_from_string)
+        public List<string> CalculateOPZ(List<string> data_from_string)
         {
-            List<object> OPZ = new List<object>();
-            Stack<object> operations = new Stack<object>();
+            List<string> OPZ = new List<string>();
+            Stack<string> operations = new Stack<string>();
             int Priority;
             for (int i = 0; i < data_from_string.Count; i++)
             {
@@ -31,7 +31,7 @@ namespace AvaloniaApplication3.Models
                             OPZ.Add(operations.Pop()); //вытаскиваем его в ОПЗ
                         }
 
-                        if ((string)data_from_string[i] == ")") //если это закрывающая скобка, то на вершине стека у нас сидит окрываюшаясЯ скобка,которыю мы удаляем , в другом случае заносим в стек
+                        if (data_from_string[i] == ")") //если это закрывающая скобка, то на вершине стека у нас сидит окрываюшаясЯ скобка,которыю мы удаляем , в другом случае заносим в стек
                         {
                             operations.Pop();
                         }

@@ -34,6 +34,7 @@ namespace AvaloniaApplication3.Views
                         InstructionText.SelectedIndex = 0;
                         InstructionView.SelectedIndex = 0;
                         InstructionMenu.IsVisible = true;
+                        InstructionMenu.Focus();
                         break;
                     }
                 case "Настройки":
@@ -76,7 +77,7 @@ namespace AvaloniaApplication3.Views
                     {
                         TextSize.Value = 26;
                         SoundSize.Value = 5;
-                        MusicSize.Value = 5;
+                        PictureSize.Value = 200;
                         break;
                     }
                 case "Назад":
@@ -225,6 +226,24 @@ namespace AvaloniaApplication3.Views
                 tb.Width = TheWindow.Width - TeachersImage.Width - 203 - tb.FontSize*2;
             }
             
+        }
+        private void Panel_KeyDown(object? sender, Avalonia.Input.KeyEventArgs e)
+        {
+            if (this.IsVisible)
+            {
+                if (e.Key == Avalonia.Input.Key.Left)
+                {
+                    Previous(this, e);
+                }
+                else if (e.Key == Avalonia.Input.Key.Right)
+                {
+                    Next(this, e);
+                }
+                else if (e.Key == Avalonia.Input.Key.Escape)
+                {
+                    Button_Click_BackFromInstructionMenu(this, e);
+                }
+            }
         }
 
 
