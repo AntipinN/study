@@ -34,7 +34,7 @@
 			<ColumnDefinition/>
 		</Grid.ColumnDefinitions>
 		
-		<StackPanel x:Name="MainMenu" Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" IsVisible="false" IsEnabled="True">
+		<StackPanel x:Name="MainMenu" Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" IsVisible="True" IsEnabled="True">
 			<TextBlock Classes="ThemeTB" Text="Великий тренер дробей!" FontSize="{Binding InterfaceTitleSize}"/>
 			<Button  Classes="b1" Content="Тренироваться" FontSize="{Binding InterfaceTextSize}" Click="Button_Click_MainMenu"/>
 			<Button  Classes="b1" Content="Теория" FontSize="{Binding InterfaceTextSize}" Click="Button_Click_MainMenu" Command="{Binding GetInstructionCommand}"/>
@@ -42,7 +42,7 @@
 			<Button  Classes="b1" Content="Выйти" FontSize="{Binding InterfaceTextSize}" Click="Button_Click_MainMenu"/>
 		</StackPanel>
 		
-		<Panel x:Name= "InstructionMenu" IsVisible="True" Margin="20" KeyDown="Panel_KeyDown">
+			<Panel x:Name= "InstructionMenu" IsVisible="False" Margin="20" KeyDown="Panel_KeyDown">
 				<Button Background="{DynamicResource BackgroundBrush}" Click="Previous" FontSize="{Binding InterfaceTextSize}">&lt;</Button>
 				<Button Background="{DynamicResource BackgroundBrush}" Click="Next" HorizontalAlignment="Right" FontSize="{Binding InterfaceTextSize}">&gt;</Button>
 				<Grid HorizontalAlignment="Stretch" Width="" ShowGridLines="False">
@@ -62,7 +62,7 @@
 						</Carousel.Items>
 					</Carousel>
 					<Button Grid.Column="0" Grid.Row="1" Content="Назад" Click="Button_Click_BackFromInstructionMenu" FontSize="{Binding InterfaceTextSize}" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="0,0,0,0"/>
-					
+
 					<Button Classes="ButtTransparent" Background="{DynamicResource BackgroundBrush}" BorderThickness="3" Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="1" SizeChanged="TextBlock_SizeChanged_ChangeTextBlockWidth" VerticalAlignment="Bottom" HorizontalAlignment="Stretch" Margin="5,0,60,55" IsHitTestVisible="False">
 						<StackPanel VerticalAlignment="Bottom" Margin="3" Orientation="Horizontal" HorizontalAlignment="Stretch">
 							<Image x:Name="TeachersImage" Source="/Assets/teacher.png" Width="170"/>
@@ -74,10 +74,8 @@
 							</Carousel>
 						</StackPanel>
 					</Button>
-					
 				</Grid>
-				
-		</Panel>
+			</Panel>
 		
 		<StackPanel x:Name="EquasionChoiceMenu" Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" IsVisible="False" IsEnabled="False">
 			<TextBlock Classes="ThemeTB" Text="Что ты хочешь тренировать?" FontSize="{Binding InterfaceTitleSize}"/>
